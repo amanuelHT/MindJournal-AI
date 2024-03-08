@@ -1,6 +1,34 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import Diary from "./Screens/DiaryScreen";
+import HomeScreen from "./Screens/HomeScreen";
+import LoginScreen from "./Screens/LoginScreen";
+import SignUpScreen from "./Screens/SignUpScreen";
+import ProfileScreen from "./Screens/ProfileScreen";
 
+
+const App = () => {
+  return (
+    <View style={styles.container}>
+      <ProfileScreen />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
+
+export default App;
+
+/*---------
 export default function App() {
   return (
     <View style={styles.container}>
@@ -18,3 +46,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+----------*/
+
