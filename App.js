@@ -1,18 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { View, StyleSheet } from "react-native";
 import Diary from "./Screens/DiaryScreen";
 import HomeScreen from "./Screens/HomeScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import SignUpScreen from "./Screens/SignUpScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 
-
 const App = () => {
   return (
     <View style={styles.container}>
-      <ProfileScreen />
+      <Diary />
     </View>
   );
 };
@@ -47,4 +45,3 @@ const styles = StyleSheet.create({
   },
 });
 ----------*/
-
