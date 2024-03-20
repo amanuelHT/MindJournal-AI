@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from "react";
-import {
+import React, { useState, useEffect, useRef } from "react";import {
   View,
+  Text,
   TouchableOpacity,
   StyleSheet,
-  Text,
-  Modal,
+  ScrollView,
+  Alert,
+  Image,
+  ImageBackground,
   TextInput,
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import AddModalComponent from "../Modals/AddModalComponent";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
 const DiaryScreen = () => {
-  const [addModalVisible, setAddModalVisible] = useState(false);
   const [newEntryText, setNewEntryText] = useState("");
   const [entries, setEntries] = useState([]);
+  const [isAddModalVisible, setAddModalVisible] = useState(false);
+
+  const backgroundImage = require("../images/backlogin.jpg"); // Replace with the path to your background image
 
   useEffect(() => {
     // Fetch entries when the component loads
@@ -53,37 +58,6 @@ const DiaryScreen = () => {
   return (
     <View style={styles.container}>
       {/* Other components */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={addModalVisible}
-        onRequestClose={() => setAddModalVisible(false)}
-      >
-        <View style={styles.modalView}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Write your diary entry..."
-            onChangeText={(text) => setNewEntryText(text)}
-            value={newEntryText}
-          />
-          <TouchableOpacity style={styles.submitButton} onPress={addEntry}>
-            <Text>Submit Entry</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-
-      <View style={styles.addButtonContainer}>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => setAddModalVisible(true)}
-        >
-          <MaterialCommunityIcons
-            name="book-plus-multiple"
-            size={24}
-            style={styles.addButtonIcon}
-          />
-        </TouchableOpacity>
-      </View>
 
       {/* Display entries */}
       {entries.map((entry) => (
@@ -92,13 +66,44 @@ const DiaryScreen = () => {
           {/* Display other entry data as needed */}
         </View>
       ))}
-    </View>
+      
+    <TouchableOpacity
+      style={styles.addButton}
+      onPress={() => setAddModalVisible(true)}
+    >
+      <MaterialCommunityIcons
+        name="book-plus-multiple"
+        style={styles.addButtonIcon}
+      />
+    </TouchableOpacity>
+    <AddModalComponent
+            isModalVisible={isAddModalVisible}
+            setModalVisible={(visible) => setAddModalVisible(visible)}
+            newEntry={newEntry}
+            setNewEntry={setNewEntry}
+            onCancelPress={cancelEntry}
+            onPhotoPress={onPhotoPress}
+            imageUri={imageUri}
+            onTeaPress={(emotion) => setSelectedEmotion(emotion)}
+            onLocationPress={(location) => setSelectedLocation(location)}
+            onDonePress={addOrUpdateEntry}
+          />
+  </View>
+
+    
+
   );
 };
 
 // Add styles for modalView, textInput, and submitButton
 const styles = StyleSheet.create({
   // ... other existing styles
+
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
 
   modalView: {
     margin: 20,
