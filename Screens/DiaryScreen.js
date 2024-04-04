@@ -184,7 +184,7 @@ const Diary = () => {
     setDetailsModalVisible(false);
     EditEntry(entryId);
   };
-
+// edit entry
   const EditEntry = async (entryId) => {
     try {
       if (user) {
@@ -224,6 +224,7 @@ const Diary = () => {
     }
   };
 
+  // delete press 
   const handleDeletePress = (entryId) => {
     deleteEntry(entryId);
   };
