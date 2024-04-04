@@ -3,8 +3,8 @@ import { StyleSheet, ImageBackground } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigator from "./navigation/TabNavigator";
-import LoginScreen from "./screens/LoginScreen";
-import SignUpScreen from "./screens/SignUpScreen";
+import LoginScreen from "./Screens/LoginScreen";
+import SignUpScreen from "./Screens/SignUpScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -51,5 +51,3 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
 });
-
-

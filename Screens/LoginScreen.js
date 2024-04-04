@@ -12,7 +12,6 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import LottieView from "lottie-react-native";
 
 const backgroundImage = require("../images/backlogin.jpg"); // Change this to the actual path of your background image
 
@@ -50,12 +49,6 @@ const LoginScreen = ({ navigation }) => {
         style={styles.gradient}
       >
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
-          <LottieView
-            source={require("../images/pen.json")}
-            autoPlay
-            loop
-            style={styles.animation}
-          />
           <Text style={styles.title}>Log In</Text>
           <View style={styles.inputContainer}>
             <TextInput

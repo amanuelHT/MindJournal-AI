@@ -2,9 +2,9 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import HomeScreen from "../screens/HomeScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import DiaryScreen from "../screens/DiaryScreen";
+import HomeScreen from "../Screens/HomeScreen";
+import ProfileScreen from "../Screens/ProfileScreen";
+import DiaryScreen from "../Screens/DiaryScreen";
 
 const tabIcons = {
   Home: "home",

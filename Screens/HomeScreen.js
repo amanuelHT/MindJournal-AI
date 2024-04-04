@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import LottieView from "lottie-react-native";
+
 import { LinearGradient } from "expo-linear-gradient";
 import { db } from "../firebase"; // Import your Firebase firestore instance
 import { collection, getDocs, query, where } from "firebase/firestore";
@@ -92,14 +92,7 @@ const HomeScreen = () => {
         >
           <View style={styles.container}>
             <Animated.View style={[styles.overlay, { opacity: fadeAnim }]}>
-              <View style={styles.animationContainer}>
-                <LottieView
-                  source={require("../images/pen.json")}
-                  autoPlay
-                  loop
-                  style={styles.animation}
-                />
-              </View>
+              <View style={styles.animationContainer}></View>
               <Text style={styles.title}>{formatDateString()}</Text>
               {diaryEntry && (
                 <Text style={styles.quoteText}>{diaryEntry.RandomD}</Text>
@@ -161,10 +154,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 20,
   },
-  animation: {
-    width: 200,
-    height: 200,
-  },
+
   title: {
     fontSize: 24,
     color: "#fff",

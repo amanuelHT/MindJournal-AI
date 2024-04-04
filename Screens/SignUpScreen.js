@@ -12,7 +12,6 @@ import { auth, db } from "../firebase"; // Import Firebase configuration
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 import { LinearGradient } from "expo-linear-gradient";
-import LottieView from "lottie-react-native";
 
 // Import your background image (replace with the actual path)
 const backgroundImage = require("../images/background1.jpg");
