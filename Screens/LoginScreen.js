@@ -1,112 +1,200 @@
-import React, { useState } from "react"; // Corrected import statement
+import React, { useState } from "react";
 import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    StyleSheet,
-    ImageBackground,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  StyleSheet,
+  ImageBackground,
 } from "react-native";
 
+import { LinearGradient } from "expo-linear-gradient";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import LottieView from "lottie-react-native";
+
+const backgroundImage = require("../images/backlogin.jpg"); // Change this to the actual path of your background image
 
 const LoginScreen = ({ navigation }) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const handleSignIn = async () => {
-        try {
-            if (email.trim() === "" || password.trim() === "") {
-                alert("Please fill in both email and password.");
-                return;
-            }
+  const handleSignIn = async () => {
+    try {
+      if (email.trim() === "" || password.trim() === "") {
+        alert("Please fill in both email and password.");
+        return;
+      }
 
-            await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
 
-            navigation.navigate("Diary");
-        } catch (error) {
-            alert(error.message);
-        }
-    };
+      navigation.navigate("Diary");
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
-    const handleSignUpNavigation = () => {
-        navigation.navigate("SignUp");
-    };
+  const handleSignUpNavigation = () => {
+    navigation.navigate("SignUp");
+  };
 
-    const handleBackToHome = () => {
-        navigation.navigate("Home");
-    };
+  const handleBackToHome = () => {
+    navigation.navigate("Home");
+  };
 
-    return (
+  return (
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+      <LinearGradient
+        colors={["rgba(0, 0, 0.1, 0.2)", "rgba(0, 0, 0.9, 0.8)"]}
+        style={styles.gradient}
+      >
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
-            <View>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    placeholderTextColor="white"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    value={email}
-                    onChangeText={setEmail}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    placeholderTextColor="white"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={setPassword}
-                />
-            </View>
-            <TouchableOpacity style={styles.signUpButton} onPress={handleSignIn}>
-                <Text style={styles.signUpButtonText}>Log In</Text>
-            </TouchableOpacity>
-            <Text style={styles.registerLink} onPress={handleSignUpNavigation}>
-                Don't have an account? Sign Up
-            </Text>
-            <TouchableOpacity style={styles.backToHomeButton} onPress={handleBackToHome}>
-                <Text style={styles.backToHomeButtonText}>Back to Home</Text>
-            </TouchableOpacity>
+          <LottieView
+            source={require("../images/pen.json")}
+            autoPlay
+            loop
+            style={styles.animation}
+          />
+          <Text style={styles.title}>Log In</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              placeholderTextColor="white"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor="white"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
+          <TouchableOpacity style={styles.signUpButton} onPress={handleSignIn}>
+            <Text style={styles.signUpButtonText}>Log In</Text>
+          </TouchableOpacity>
+          <Text style={styles.registerLink} onPress={handleSignUpNavigation}>
+            Don't have an account? Sign Up
+          </Text>
+          <TouchableOpacity
+            style={styles.backToHomeButton}
+            onPress={handleBackToHome}
+          >
+            <Text style={styles.backToHomeButtonText}>Back to Home</Text>
+          </TouchableOpacity>
         </KeyboardAvoidingView>
-    );
+      </LinearGradient>
+    </ImageBackground>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f5f5f5',
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    marginTop: 70,
+    marginBottom: 20,
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#fff",
+    borderRadius: 8,
+    width: 300,
+    padding: 15,
+    marginBottom: 20,
+    color: "white",
+    fontSize: 20,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    input: {
-        height: 40,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-        color: 'black',
-        backgroundColor: 'white',
-        borderRadius: 5,
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  signUpButton: {
+    backgroundColor: "#ff6f61",
+    borderRadius: 8,
+    padding: 15,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    signUpButton: {
-        backgroundColor: 'blue',
-        padding: 10,
-        borderRadius: 5,
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+
+  signUpButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  registerLink: {
+    marginTop: 20,
+    color: "#fff",
+    textAlign: "center",
+    textDecorationLine: "underline",
+  },
+  animation: {
+    width: 200, // Adjust as needed
+    height: 200, // Adjust as needed
+    position: "absolute",
+    bottom: 20,
+  },
+  gradient: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    height: "100%",
+  },
+
+  backToHomeButton: {
+    marginTop: 20,
+    backgroundColor: "#3498db",
+    borderRadius: 8,
+    padding: 15,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    signUpButtonText: {
-        color: 'white',
-    },
-    registerLink: {
-        color: 'blue',
-        marginTop: 15,
-    },
-    backToHomeButton: {
-        marginTop: 15,
-    },
-    backToHomeButtonText: {
-        color: 'blue',
-    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+
+  backToHomeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 18,
+  },
 });
 
 export default LoginScreen;

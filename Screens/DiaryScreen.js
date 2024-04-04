@@ -309,155 +309,155 @@ const Diary = () => {
   };
 
   return (
-      <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-        <LinearGradient
-            colors={["rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 0.2)"]}
-            style={styles.gradient}
-        >
-          <View style={styles.container}>
-            <View
-                style={[
-                  styles.searchInput,
-                  searchQuery ? styles.searchInputWithValue : null,
-                ]}
-            >
-              <MaterialCommunityIcons
-                  name="magnify"
-                  style={[
-                    styles.searchIcon,
-                    searchQuery ? styles.searchIconWithValue : null,
-                  ]}
-              />
-              <TextInput
-                  placeholder="Search entries..."
-                  placeholderTextColor={
-                    searchQuery
-                        ? styles.searchPlaceholderFocused.color
-                        : styles.searchPlaceholder.color
-                  }
-                  onChangeText={(text) => setSearchQuery(text)}
-                  value={searchQuery}
-                  style={[
-                    styles.searchInputText,
-                    searchQuery ? styles.searchInputWithValueFocused : null,
-                  ]}
-                  onFocus={() => setSearchInputFocused(true)}
-                  onBlur={() => setSearchInputFocused(false)}
-              />
-            </View>
-
-            <ScrollView
-                style={styles.scrollContainer}
-                contentContainerStyle={styles.scrollContentContainer}
-                showsVerticalScrollIndicator={false}
-            >
-              {searchQuery
-                  ? filterEntries().map((entry) => (
-                      <TouchableOpacity
-                          key={entry.id}
-                          style={styles.entryItem}
-                          onPress={() => handleEntryPress(entry.id)}
-                      >
-                        <DetailsModal
-                            isModalVisible={isDetailsModalVisible[entry.id] || false}
-                            setModalVisible={(visible) =>
-                                setDetailsModalVisible((prevVisibility) => ({
-                                  ...prevVisibility,
-                                  [entry.id]: visible,
-                                }))
-                            }
-                            onDeletePress={() => handleDeletePress(entry.id)}
-                            onEditPress={() => handleEditPress(entry.id)}
-                            expanded={expandedEntryId === entry.id}
-                            onPress={() => setExpandedEntryId(entry.id)}
-                        >
-                          <View style={styles.topEntryContainer}>
-                            <Text style={styles.timestamp}>{entry.timestamp}</Text>
-                            <Text style={styles.emotion}>{entry.emotion}</Text>
-                            <Text style={styles.location}>{entry.location}</Text>
-                          </View>
-                          <View style={styles.bodyEntryContainer}>
-                            <Text style={styles.entryText}>{entry.text}</Text>
-                            {entry.imageUri && (
-                                <Image
-                                    source={{ uri: entry.imageUri }}
-                                    style={styles.imageUri}
-                                    onError={(error) =>
-                                        console.error("Image loading error:", error)
-                                    }
-                                />
-                            )}
-                          </View>
-                        </DetailsModal>
-                      </TouchableOpacity>
-                  ))
-                  : entries.map((entry) => (
-                      <TouchableOpacity
-                          key={entry.id}
-                          style={styles.entryItem}
-                          onPress={() => handleEntryPress(entry.id)}
-                      >
-                        <DetailsModal
-                            isModalVisible={isDetailsModalVisible[entry.id] || false}
-                            setModalVisible={(visible) =>
-                                setDetailsModalVisible((prevVisibility) => ({
-                                  ...prevVisibility,
-                                  [entry.id]: visible,
-                                }))
-                            }
-                            onDeletePress={() => handleDeletePress(entry.id)}
-                            onEditPress={() => handleEditPress(entry.id)}
-                            expanded={expandedEntryId === entry.id}
-                            onPress={() => setExpandedEntryId(entry.id)}
-                        >
-                          <View style={styles.topEntryContainer}>
-                            <Text style={styles.timestamp}>{entry.timestamp}</Text>
-                            <Text style={styles.emotion}>{entry.emotion}</Text>
-                            <Text style={styles.location}>{entry.location}</Text>
-                          </View>
-                          <View style={styles.bodyEntryContainer}>
-                            <Text style={styles.entryText}>{entry.text}</Text>
-                            {entry.imageUri && (
-                                <Image
-                                    source={{ uri: entry.imageUri }}
-                                    style={styles.imageUri}
-                                    onError={(error) =>
-                                        console.error("Image loading error:", error)
-                                    }
-                                />
-                            )}
-                          </View>
-                        </DetailsModal>
-                      </TouchableOpacity>
-                  ))}
-            </ScrollView>
-
-            <View style={styles.addButtonContainer}>
-              <TouchableOpacity
-                  style={styles.addButton}
-                  onPress={() => setAddModalVisible(true)}
-              >
-                <MaterialCommunityIcons
-                    name="book-plus-multiple"
-                    style={styles.addButtonIcon}
-                />
-              </TouchableOpacity>
-            </View>
-            <AddModalComponent
-                isModalVisible={isAddModalVisible}
-                setModalVisible={(visible) => setAddModalVisible(visible)}
-                newEntry={newEntry}
-                setNewEntry={setNewEntry}
-                onCancelPress={cancelEntry}
-                onPhotoPress={onPhotoPress}
-                imageUri={imageUri}
-                onTeaPress={(emotion) => setSelectedEmotion(emotion)}
-                onLocationPress={(location) => setSelectedLocation(location)}
-                onDonePress={addOrUpdateEntry}
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+      <LinearGradient
+        colors={["rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 0.2)"]}
+        style={styles.gradient}
+      >
+        <View style={styles.container}>
+          <View
+            style={[
+              styles.searchInput,
+              searchQuery ? styles.searchInputWithValue : null,
+            ]}
+          >
+            <MaterialCommunityIcons
+              name="magnify"
+              style={[
+                styles.searchIcon,
+                searchQuery ? styles.searchIconWithValue : null,
+              ]}
+            />
+            <TextInput
+              placeholder="Search entries..."
+              placeholderTextColor={
+                searchQuery
+                  ? styles.searchPlaceholderFocused.color
+                  : styles.searchPlaceholder.color
+              }
+              onChangeText={(text) => setSearchQuery(text)}
+              value={searchQuery}
+              style={[
+                styles.searchInputText,
+                searchQuery ? styles.searchInputWithValueFocused : null,
+              ]}
+              onFocus={() => setSearchInputFocused(true)}
+              onBlur={() => setSearchInputFocused(false)}
             />
           </View>
-        </LinearGradient>
-      </ImageBackground>
+
+          <ScrollView
+            style={styles.scrollContainer}
+            contentContainerStyle={styles.scrollContentContainer}
+            showsVerticalScrollIndicator={false}
+          >
+            {searchQuery
+              ? filterEntries().map((entry) => (
+                  <TouchableOpacity
+                    key={entry.id}
+                    style={styles.entryItem}
+                    onPress={() => handleEntryPress(entry.id)}
+                  >
+                    <DetailsModal
+                      isModalVisible={isDetailsModalVisible[entry.id] || false}
+                      setModalVisible={(visible) =>
+                        setDetailsModalVisible((prevVisibility) => ({
+                          ...prevVisibility,
+                          [entry.id]: visible,
+                        }))
+                      }
+                      onDeletePress={() => handleDeletePress(entry.id)}
+                      onEditPress={() => handleEditPress(entry.id)}
+                      expanded={expandedEntryId === entry.id}
+                      onPress={() => setExpandedEntryId(entry.id)}
+                    >
+                      <View style={styles.topEntryContainer}>
+                        <Text style={styles.timestamp}>{entry.timestamp}</Text>
+                        <Text style={styles.emotion}>{entry.emotion}</Text>
+                        <Text style={styles.location}>{entry.location}</Text>
+                      </View>
+                      <View style={styles.bodyEntryContainer}>
+                        <Text style={styles.entryText}>{entry.text}</Text>
+                        {entry.imageUri && (
+                          <Image
+                            source={{ uri: entry.imageUri }}
+                            style={styles.imageUri}
+                            onError={(error) =>
+                              console.error("Image loading error:", error)
+                            }
+                          />
+                        )}
+                      </View>
+                    </DetailsModal>
+                  </TouchableOpacity>
+                ))
+              : entries.map((entry) => (
+                  <TouchableOpacity
+                    key={entry.id}
+                    style={styles.entryItem}
+                    onPress={() => handleEntryPress(entry.id)}
+                  >
+                    <DetailsModal
+                      isModalVisible={isDetailsModalVisible[entry.id] || false}
+                      setModalVisible={(visible) =>
+                        setDetailsModalVisible((prevVisibility) => ({
+                          ...prevVisibility,
+                          [entry.id]: visible,
+                        }))
+                      }
+                      onDeletePress={() => handleDeletePress(entry.id)}
+                      onEditPress={() => handleEditPress(entry.id)}
+                      expanded={expandedEntryId === entry.id}
+                      onPress={() => setExpandedEntryId(entry.id)}
+                    >
+                      <View style={styles.topEntryContainer}>
+                        <Text style={styles.timestamp}>{entry.timestamp}</Text>
+                        <Text style={styles.emotion}>{entry.emotion}</Text>
+                        <Text style={styles.location}>{entry.location}</Text>
+                      </View>
+                      <View style={styles.bodyEntryContainer}>
+                        <Text style={styles.entryText}>{entry.text}</Text>
+                        {entry.imageUri && (
+                          <Image
+                            source={{ uri: entry.imageUri }}
+                            style={styles.imageUri}
+                            onError={(error) =>
+                              console.error("Image loading error:", error)
+                            }
+                          />
+                        )}
+                      </View>
+                    </DetailsModal>
+                  </TouchableOpacity>
+                ))}
+          </ScrollView>
+
+          <View style={styles.addButtonContainer}>
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => setAddModalVisible(true)}
+            >
+              <MaterialCommunityIcons
+                name="book-plus-multiple"
+                style={styles.addButtonIcon}
+              />
+            </TouchableOpacity>
+          </View>
+          <AddModalComponent
+            isModalVisible={isAddModalVisible}
+            setModalVisible={(visible) => setAddModalVisible(visible)}
+            newEntry={newEntry}
+            setNewEntry={setNewEntry}
+            onCancelPress={cancelEntry}
+            onPhotoPress={onPhotoPress}
+            imageUri={imageUri}
+            onTeaPress={(emotion) => setSelectedEmotion(emotion)}
+            onLocationPress={(location) => setSelectedLocation(location)}
+            onDonePress={addOrUpdateEntry}
+          />
+        </View>
+      </LinearGradient>
+    </ImageBackground>
   );
 };
 
@@ -503,6 +503,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
+  searchInputFocused: {
+    borderColor: "#fff",
+  },
+
+  searchPlaceholderFocused: {
+    color: "#fff",
+  },
 
   searchInputWithValue: {
     borderColor: "#fff",
