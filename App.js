@@ -5,13 +5,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigator from "./navigation/TabNavigator";
 import LoginScreen from "./screens/LoginScreen";
 import SignUpScreen from "./screens/SignUpScreen";
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import Diary from "./screens/DiaryScreen";
-import HomeScreen from "./screens/HomeScreen";
-import ProfileScreen from "./screens/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
