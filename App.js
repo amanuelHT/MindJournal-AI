@@ -10,7 +10,7 @@ import ProfileScreen from "./Screens/ProfileScreen";
 const App = () => {
   return (
     <View style={styles.container}>
-      <Diary />
+      <LoginScreen/>
     </View>
   );
 };
