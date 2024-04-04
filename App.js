@@ -6,12 +6,6 @@ import TabNavigator from "./navigation/TabNavigator";
 import LoginScreen from "./screens/LoginScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import Diary from "./Screens/DiaryScreen";
-import HomeScreen from "./Screens/HomeScreen";
-import ProfileScreen from "./Screens/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -64,7 +58,7 @@ const styles = StyleSheet.create({
 /*const App = () => {
   return (
     <View style={styles.container}>
-      <ProfileScreen />
+      <Diary />
     </View>
   );
 };
