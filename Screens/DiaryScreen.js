@@ -224,63 +224,7 @@ const Diary = () => {
     }
   };
 
-  // delete press 
-  const handleDeletePress = (entryId) => {
-    deleteEntry(entryId);
-  };
-
-  const deleteEntry = async (entryId) => {
-    try {
-      if (user) {
-        const diaryDocRef = doc(db, "diary", entryId);
-        await deleteDoc(diaryDocRef);
-        fetchEntries();
-        setDetailsModalVisible(false);
-        Alert.alert("Diary entry deleted successfully.");
-      }
-    } catch (error) {
-      console.error("Error deleting diary entry: ", error);
-    }
-  };
-
-  const onPhotoPress = async () => {
-    Alert.alert("Choose Source", "Select a source for the photo:", [
-      {
-        text: "Choose from Library",
-        onPress: async () => {
-          const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [2, 3],
-            quality: 1,
-          });
-
-          if (!result.canceled) {
-            setImageUri(result.assets[0].uri);
-          }
-        },
-      },
-      {
-        text: "Take a Photo",
-        onPress: async () => {
-          const result = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [2, 3],
-            quality: 1,
-          });
-
-          if (!result.canceled) {
-            setImageUri(result.assets[0].uri);
-          }
-        },
-      },
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-    ]);
-  };
+  //------//
 
   const filterEntries = () => {
     // Convert the search query to lowercase for case-insensitive comparison
