@@ -463,8 +463,6 @@ const Diary = () => {
 };
 
 const styles = StyleSheet.create({
-  // ... (other styles)
-
   searchInput: {
     height: 50,
     paddingHorizontal: 20,
@@ -485,37 +483,30 @@ const styles = StyleSheet.create({
     elevation: 5,
     overflow: "hidden",
   },
-
   searchIcon: {
     fontSize: 24,
     color: "white",
     marginRight: 8,
   },
-
   searchInputText: {
     fontSize: 16,
     color: "#fff",
     flex: 1,
     marginLeft: 8,
   },
-
   searchPlaceholder: {
     color: "rgba(255, 255, 255, 0.7)",
     fontSize: 16,
   },
-
   searchInputFocused: {
     borderColor: "#fff",
   },
-
   searchPlaceholderFocused: {
     color: "#fff",
   },
-
   searchInputWithValue: {
     borderColor: "#fff",
   },
-
   searchInputWithValueFocused: {
     borderColor: "#fff",
     shadowColor: "#fff",
@@ -526,20 +517,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 6,
   },
-
-  // Additional styling for when input has text and focus
-  searchInputWithValueFocused: {
-    borderColor: "#fff",
-    shadowColor: "#fff",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 6,
-  },
-
-  // Remaining styles...
   backgroundImage: {
     flex: 1,
     resizeMode: "cover",
@@ -578,14 +555,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   timestamp: {
-    fontSize: 18, // Increased font size
+    fontSize: 18,
     fontWeight: "200",
-    color: "#ffd700", // Dodger Blue text color
+    color: "#ffd700",
   },
   emotion: {
-    fontSize: 34, // Increased font size
+    fontSize: 34,
     marginLeft: 10,
-    color: "white", // Alizarin Crimson text color
+    color: "white",
     shadowColor: "white",
     shadowOffset: {
       width: 1,
@@ -604,7 +581,6 @@ const styles = StyleSheet.create({
     color: "white",
     textTransform: "uppercase",
   },
-
   bodyEntryContainer: {
     flexDirection: "column",
   },
@@ -620,7 +596,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     overflow: "hidden",
     borderWidth: 2,
-    borderColor: "white", // You can change the border color
+    borderColor: "white",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -644,7 +620,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     padding: 20,
-    elevation: 10,
+   // elevation: 10,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
