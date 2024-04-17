@@ -10,10 +10,14 @@ import {
   ImageBackground,
   TextInput,
 } from "react-native";
+import
 
-import { LinearGradient } from "expo-linear-gradient";
+
+
+{ LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from "expo-image-picker";
-import {
+import
+ {
   collection,
   query,
   where,
@@ -23,7 +27,8 @@ import {
   doc,
   updateDoc,
   deleteDoc,
-} from "firebase/firestore";
+} 
+from "firebase/firestore";
 import { db, auth } from "../firebase";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AddModalComponent from "../Modals/AddModalComponent";
@@ -266,8 +271,10 @@ const saveEditedEntry = async () => {
       },
       {
         text: "Take a Photo",
+
         onPress: async () => {
-          const result = await ImagePicker.launchCameraAsync({
+          const result = await ImagePicker.launchCameraAsync
+          ({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [2, 3],

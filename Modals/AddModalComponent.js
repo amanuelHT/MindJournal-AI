@@ -30,7 +30,8 @@ const writeLocations = [
   "BathRoom",
 ];
 
-const AddModalComponent = ({
+const AddModalComponent = 
+({
   isModalVisible,
   setModalVisible,
   newEntry,
