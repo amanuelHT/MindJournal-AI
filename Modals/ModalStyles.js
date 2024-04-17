@@ -106,7 +106,7 @@ const addModalStyles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 15,
-    backgroundColor: "#ff6347", // Red color for cancel icon.
+    backgroundColor: "#ff6347", // Red color for cancel icon .
     borderRadius: 15,
   },
 
@@ -114,15 +114,16 @@ const addModalStyles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 15,
-    backgroundColor: "#2ecc71", // Green color for check icon.
+    backgroundColor: "#2ecc71", // Green color for check icon .
     borderRadius: 15,
-    marginLeft: 10, // Add some space between the icons.
+    marginLeft: 10, // Add some space between the icons .
   },
+  
   APhotoIcon: {
     flex: 1,
     alignItems: "center",
     padding: 15,
-    backgroundColor: "transparent", // Green color for check icon.
+    backgroundColor: "transparent", // Green color for check icon .
     borderRadius: 20,
     marginLeft: 10, // Add some space between the icons.
   },
@@ -169,7 +170,7 @@ const addModalStyles = StyleSheet.create({
     textShadowColor: "#000", // Add text shadow color.
     textShadowOffset: { width: 1, height: 1 }, // Add text shadow offset.
     textShadowRadius: 2, // Add text shadow radius.
-    padding: 50,
+    padding: 50, 
   },
   locationOnModal: {
     textAlign: "center",
