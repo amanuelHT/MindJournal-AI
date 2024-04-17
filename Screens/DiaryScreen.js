@@ -1,4 +1,4 @@
-import React, 
+import React,
 { useState, useEffect, useRef } from "react";
 import
  {
@@ -15,7 +15,6 @@ import
 import
 
 
-
 { LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from "expo-image-picker";
 import
@@ -29,7 +28,7 @@ import
   doc,
   updateDoc,
   deleteDoc,
-} 
+}
 from "firebase/firestore";
 import { db, auth } from "../firebase";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -47,11 +46,8 @@ const Diary = () => {
   const [selectedEmotion, setSelectedEmotion] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [expandedEntryId, setExpandedEntryId] = useState("null");
-
   const [searchQuery, setSearchQuery] = useState("");
-
   const [isSearchInputFocused, setSearchInputFocused] = useState(false);
-
   const user = auth.currentUser;
   const backgroundImage = require("../images/backlogin.jpg"); // Replace with the path to your background image
 
@@ -237,7 +233,7 @@ const saveEditedEntry = async () => {
 
   //------//
 
-  //delete press 
+  //delete press
 
   const handleDeletePress = (entryId) => {
     deleteEntry(entryId);
@@ -257,10 +253,10 @@ const saveEditedEntry = async () => {
     }
   };
 
-  
+
   const onPhotoPress = async () => {
     Alert.alert("Choose Source", "Select a source for the photo:", [
-      
+
       {
         text: "Choose from Library",
         onPress: async () => {
@@ -319,19 +315,15 @@ const saveEditedEntry = async () => {
           // Check if the entry text or timestamp contains the search query
           const textMatch = lowerCaseText.includes(lowerCaseQuery);
           const dateMatch = lowerCaseTimestamp.includes(lowerCaseQuery);
-    
           console.log("textMatch:", textMatch);
           console.log("dateMatch:", dateMatch);
-    
           return textMatch || dateMatch;
         });
-    
         console.log("filteredEntries:", filteredEntries);
         return filteredEntries;
       };
 
-      return
-      ( <ImageBackground source={backgroundImage}
+      return( <ImageBackground source={backgroundImage}
         style={styles.backgroundImage}>
          <LinearGradient
            colors={["rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 0.2)"]}
@@ -342,14 +334,14 @@ const saveEditedEntry = async () => {
                style={[
                  styles.searchInput,
                  searchQuery ? styles.searchInputWithValue : null,
-               ]} 
+               ]}
              >
                <MaterialCommunityIcons
                  name="magnify"
                  style={[
                    styles.searchIcon,
                    searchQuery ? styles.searchIconWithValue : null,
-                   
+
                  ]}
                />
                <TextInput
@@ -365,19 +357,17 @@ const saveEditedEntry = async () => {
                    styles.searchInputText,
                    searchQuery ? styles.searchInputWithValueFocused : null,
                  ]}
-                 
+
                  onFocus={() => setSearchInputFocused(true)}
                  onBlur={() => setSearchInputFocused(false)}
                />
              </View>
-   
-        
+
           <ScrollView
             style={styles.scrollContainer}
             contentContainerStyle={styles.scrollContentContainer}
             showsVerticalScrollIndicator={false}
           >
-
             {searchQuery
               ? filterEntries().map((entry) => (
                   <TouchableOpacity
@@ -490,7 +480,7 @@ const saveEditedEntry = async () => {
 };
 
 const styles = StyleSheet.create({
-  searchInput: 
+  searchInput:
   {
     height: 50,
     paddingHorizontal: 20,
