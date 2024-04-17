@@ -1,7 +1,9 @@
 import { StyleSheet } from "react-native";
 
-const sharedStyles = {
-  modalContainer: {
+const sharedStyles =
+ {
+  modalContainer:
+   {
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
@@ -10,7 +12,8 @@ const sharedStyles = {
     borderRadius: 40,
   },
 
-  modalContent: {
+  modalContent:
+   {
     backgroundColor: "white",
     padding: 20,
     borderTopLeftRadius: 20,
@@ -29,28 +32,33 @@ const sharedStyles = {
     shadowRadius: 4.65,
     elevation: 6,
   },
-  input: {
+
+  input:
+   {
     borderWidth: 2,
-    borderColor: "transparent", // Blue border color
+    borderColor: "transparent", // Blue border color.
     borderRadius: 25,
     padding: 15,
     marginTop: 20,
     fontSize: 20,
-    backgroundColor: "#ecf0f1", // Light gray background color
+    backgroundColor: "#ecf0f1", // Light gray background color.
     color: "#2c3e50",
   },
 
 
-  iconButtonContainer: {
+  iconButtonContainer:
+   {
     alignItems: "center",
     padding: 20,
   },
-  scrollContentContainer: {
+  scrollContentContainer:
+   {
     paddingBottom: 220,
   },
 };
 
-const editModalStyles = StyleSheet.create({
+const editModalStyles = StyleSheet.create(
+  {
   ...sharedStyles,
 
   EditmodalButtons: {
@@ -118,7 +126,7 @@ const addModalStyles = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 10, // Add some space between the icons .
   },
-  
+
   APhotoIcon: {
     flex: 1,
     alignItems: "center",
