@@ -358,6 +358,9 @@ const saveEditedEntry = async () => {
             />
           </View>
 
+          
+
+
           <ScrollView
             style={styles.scrollContainer}
             contentContainerStyle={styles.scrollContentContainer}
@@ -443,6 +446,7 @@ const saveEditedEntry = async () => {
                   </TouchableOpacity>
                 ))}
           </ScrollView>
+
 
           <View style={styles.addButtonContainer}>
             <TouchableOpacity
