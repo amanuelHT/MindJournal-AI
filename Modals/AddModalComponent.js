@@ -9,7 +9,8 @@ import {
   ScrollView,
   Image,
   Platform,
-} from "react-native";
+} 
+from "react-native";
 import { sharedStyles, addModalStyles as styles } from "./ModalStyles";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Picker } from "@react-native-picker/picker";
@@ -137,6 +138,7 @@ const AddModalComponent = ({
                 {imageUri && (
                   <Image
                     source={{ uri: imageUri }}
+
                     style={styles.uploadedImage}
                     resizeMode="cover"
                   />

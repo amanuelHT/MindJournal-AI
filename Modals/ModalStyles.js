@@ -153,7 +153,8 @@ const addModalStyles = StyleSheet.create({
     marginLeft: 10, // Add some space between the icons.
   },
 
-  uploadedImage: {
+  uploadedImage: 
+  {
     marginTop: 20,
     width: "60%",
     height: 200,
