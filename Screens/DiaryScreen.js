@@ -45,7 +45,9 @@ const Diary = () => {
   const [selectedEmotion, setSelectedEmotion] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [expandedEntryId, setExpandedEntryId] = useState("null");
+
   const [searchQuery, setSearchQuery] = useState("");
+
   const [isSearchInputFocused, setSearchInputFocused] = useState(false);
 
   const user = auth.currentUser;
@@ -234,6 +236,7 @@ const saveEditedEntry = async () => {
   //------//
 
   //delete press 
+
   const handleDeletePress = (entryId) => {
     deleteEntry(entryId);
   };
@@ -252,8 +255,10 @@ const saveEditedEntry = async () => {
     }
   };
 
+  
   const onPhotoPress = async () => {
     Alert.alert("Choose Source", "Select a source for the photo:", [
+      
       {
         text: "Choose from Library",
         onPress: async () => {
@@ -281,7 +286,8 @@ const saveEditedEntry = async () => {
             quality: 1,
           });
 
-          if (!result.canceled) {
+          if (!result.canceled)
+           {
             setImageUri(result.assets[0].uri);
           }
         },
@@ -293,79 +299,83 @@ const saveEditedEntry = async () => {
     ]);
   };
 
+
   const filterEntries = () => {
     // Convert the search query to lowercase for case-insensitive comparison
     const lowerCaseQuery = searchQuery.toLowerCase().trim();
 
+
     // Filter entries based on search query and date
-    const filteredEntries = entries.filter((entry) => {
+    const filteredEntries = entries.filter((entry) =>
+     {
       const lowerCaseText = entry.text.toLowerCase();
       const lowerCaseTimestamp = entry.timestamp.toLowerCase();
 
       console.log("lowerCaseQuery:", lowerCaseQuery);
       console.log("lowerCaseText:", lowerCaseText);
       console.log("lowerCaseTimestamp:", lowerCaseTimestamp);
+          // Check if the entry text or timestamp contains the search query
+          const textMatch = lowerCaseText.includes(lowerCaseQuery);
+          const dateMatch = lowerCaseTimestamp.includes(lowerCaseQuery);
+    
+          console.log("textMatch:", textMatch);
+          console.log("dateMatch:", dateMatch);
+    
+          return textMatch || dateMatch;
+        });
+    
+        console.log("filteredEntries:", filteredEntries);
+        return filteredEntries;
+      };
 
-      // Check if the entry text or timestamp contains the search query
-      const textMatch = lowerCaseText.includes(lowerCaseQuery);
-      const dateMatch = lowerCaseTimestamp.includes(lowerCaseQuery);
-
-      console.log("textMatch:", textMatch);
-      console.log("dateMatch:", dateMatch);
-
-      return textMatch || dateMatch;
-    });
-
-    console.log("filteredEntries:", filteredEntries);
-    return filteredEntries;
-  };
-
-  return (
-    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-      <LinearGradient
-        colors={["rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 0.2)"]}
-        style={styles.gradient}
-      >
-        <View style={styles.container}>
-          <View
-            style={[
-              styles.searchInput,
-              searchQuery ? styles.searchInputWithValue : null,
-            ]}
-          >
-            <MaterialCommunityIcons
-              name="magnify"
-              style={[
-                styles.searchIcon,
-                searchQuery ? styles.searchIconWithValue : null,
-              ]}
-            />
-            <TextInput
-              placeholder="Search entries..."
-              placeholderTextColor={
-                searchQuery
-                  ? styles.searchPlaceholderFocused.color
-                  : styles.searchPlaceholder.color
-              }
-              onChangeText={(text) => setSearchQuery(text)}
-              value={searchQuery}
-              style={[
-                styles.searchInputText,
-                searchQuery ? styles.searchInputWithValueFocused : null,
-              ]}
-              onFocus={() => setSearchInputFocused(true)}
-              onBlur={() => setSearchInputFocused(false)}
-            />
-          </View>
-
-          
-
-
+      return
+      ( <ImageBackground source={backgroundImage}
+        style={styles.backgroundImage}>
+         <LinearGradient
+           colors={["rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 0.2)"]}
+           style={styles.gradient}
+         >
+           <View style={styles.container}>
+             <View
+               style={[
+                 styles.searchInput,
+                 searchQuery ? styles.searchInputWithValue : null,
+               ]} 
+             >
+               <MaterialCommunityIcons
+                 name="magnify"
+                 style={[
+                   styles.searchIcon,
+                   searchQuery ? styles.searchIconWithValue : null,
+                   
+                 ]}
+               />
+               <TextInput
+                 placeholder="Search entries..."
+                 placeholderTextColor={
+                   searchQuery
+                     ? styles.searchPlaceholderFocused.color
+                     : styles.searchPlaceholder.color
+                 }
+                 onChangeText={(text) => setSearchQuery(text)}
+                 value={searchQuery}
+                 style={[
+                   styles.searchInputText,
+                   searchQuery ? styles.searchInputWithValueFocused : null,
+                 ]}
+                 
+                 onFocus={() => setSearchInputFocused(true)}
+                 onBlur={() => setSearchInputFocused(false)}
+               />
+             </View>
+   
+        
           <ScrollView
             style={styles.scrollContainer}
             contentContainerStyle={styles.scrollContentContainer}
             showsVerticalScrollIndicator={false}
           >
+
             {searchQuery
               ? filterEntries().map((entry) => (
                   <TouchableOpacity
@@ -478,7 +488,8 @@ const saveEditedEntry = async () => {
 };
 
 const styles = StyleSheet.create({
-  searchInput: {
+  searchInput: 
+  {
     height: 50,
     paddingHorizontal: 20,
     marginBottom: 20,
