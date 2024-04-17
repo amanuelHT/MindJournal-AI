@@ -184,47 +184,51 @@ const Diary = () => {
     setDetailsModalVisible(false);
     EditEntry(entryId);
   };
+//-----//
+
 // edit entry
-  const EditEntry = async (entryId) => {
-    try {
-      if (user) {
-        const diaryDocRef = doc(db, "diary", entryId);
-        const docSnapshot = await getDoc(diaryDocRef);
-        const entryData = docSnapshot.data();
+const EditEntry = async (entryId) => {
+  try {
+    if (user) {
+      const diaryDocRef = doc(db, "diary", entryId);
+      const docSnapshot = await getDoc(diaryDocRef);
+      const entryData = docSnapshot.data();
 
-        if (entryData) {
-          setSelectedEmotion(entryData.emotion || "");
-          setSelectedLocation(entryData.location || "");
-          setNewEntry(entryData.text);
-          setImageUri(entryData.imageUri || null);
-        }
+      if (entryData) {
+        setSelectedEmotion(entryData.emotion || "");
+        setSelectedLocation(entryData.location || "");
+        setNewEntry(entryData.text);
+        setImageUri(entryData.imageUri || null);
       }
-    } catch (error) {
-      console.error("Error fetching diary entry: ", error);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching diary entry: ", error);
+  }
+};
 
-  const saveEditedEntry = async () => {
-    try {
-      if (user && selectedEntry) {
-        const diaryDocRef = doc(db, "diary", selectedEntry);
-        await updateDoc(diaryDocRef, {
-          text: newEntry,
-          timestamp: currentDate,
-          imageUri: imageUri,
-          emotion: selectedEmotion,
-          location: selectedLocation,
-        });
+const saveEditedEntry = async () => {
+  try {
+    if (user && selectedEntry) {
+      const diaryDocRef = doc(db, "diary", selectedEntry);
+      await updateDoc(diaryDocRef, {
+        text: newEntry,
+        timestamp: currentDate,
+        imageUri: imageUri,
+        emotion: selectedEmotion,
+        location: selectedLocation,
+      });
 
-        setDetailsModalVisible(false);
-        fetchEntries();
-      }
-    } catch (error) {
-      console.error("Error editing diary entry: ", error);
+      setDetailsModalVisible(false);
+      fetchEntries();
     }
-  };
+  } catch (error) {
+    console.error("Error editing diary entry: ", error);
+  }
+};
 
-  // delete press 
+  //------//
+
+  //delete press 
   const handleDeletePress = (entryId) => {
     deleteEntry(entryId);
   };
