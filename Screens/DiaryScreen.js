@@ -273,7 +273,7 @@ const saveEditedEntry = async () => {
         },
       },
       {
-        text: "Take a Photo",
+        text: "Take A Photo",
 
         onPress: async () => {
           const result = await ImagePicker.launchCameraAsync
