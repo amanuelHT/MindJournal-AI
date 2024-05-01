@@ -8,7 +8,7 @@ const SummaryScreen = () => {
   const [summary, setSummary] = useState("");
   const auth = getAuth();
   const user = auth.currentUser;
-
+//--------
   useEffect(() => {
     if (user) {
       const unsubscribe = loadLatestSummary(user.uid);

@@ -88,7 +88,7 @@
                             originalDiaryEntryId: snapshot.id, // Store the original diary entry ID
                         });
                         console.log('Summary created in Firestore for user:', uid);
-                    }
+                    }//----
                 } else {
                     console.error('Generated summary is empty, no text to update in Firestore.');
                 }
