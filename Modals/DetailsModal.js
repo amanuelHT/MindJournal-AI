@@ -50,8 +50,9 @@ const DetailsModal = ({
     setModalVisible(false);
     navigation.navigate("Diary");
   };
-
-  const handleDeletePress = () => {
+// her are the intry function. 
+  const handleDeletePress = () =>
+   {
     Alert.alert(
       "Delete Entry",
       "Are you sure you want to delete this entry?",
@@ -75,6 +76,7 @@ const DetailsModal = ({
   };
 
   return (
+
     <View>
       <TouchableOpacity onPress={handleFullPagePress}>
         <Animated.View style={[styles.container, { height: animatedHeight }]}>
@@ -87,7 +89,7 @@ const DetailsModal = ({
         transparent={true}
         visible={isModalVisible}
         onRequestClose={handleCloseModal}
-      >
+      > 
         <View style={styles.modalContainer}>
           <View style={styles.modalButtonsDetails}>
             <TouchableOpacity
@@ -115,7 +117,7 @@ const DetailsModal = ({
     </View>
   );
 };
-
+//  style the creating
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,

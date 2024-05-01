@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
+import React,
+{ useState, useEffect, useRef } from "react";
+import
+ {
   View,
   Text,
   TouchableOpacity,
@@ -10,10 +12,13 @@ import {
   ImageBackground,
   TextInput,
 } from "react-native";
+import
 
-import { LinearGradient } from "expo-linear-gradient";
+
+{ LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from "expo-image-picker";
-import {
+import
+ {
   collection,
   query,
   where,
@@ -23,7 +28,8 @@ import {
   doc,
   updateDoc,
   deleteDoc,
-} from "firebase/firestore";
+}
+from "firebase/firestore";
 import { db, auth } from "../firebase";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AddModalComponent from "../Modals/AddModalComponent";
@@ -42,7 +48,6 @@ const Diary = () => {
   const [expandedEntryId, setExpandedEntryId] = useState("null");
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchInputFocused, setSearchInputFocused] = useState(false);
-
   const user = auth.currentUser;
   const backgroundImage = require("../images/backlogin.jpg"); // Replace with the path to your background image
 
@@ -228,7 +233,8 @@ const saveEditedEntry = async () => {
 
   //------//
 
-  //delete press 
+  //delete press
+
   const handleDeletePress = (entryId) => {
     deleteEntry(entryId);
   };
@@ -247,8 +253,10 @@ const saveEditedEntry = async () => {
     }
   };
 
+
   const onPhotoPress = async () => {
     Alert.alert("Choose Source", "Select a source for the photo:", [
+
       {
         text: "Choose from Library",
         onPress: async () => {
@@ -265,16 +273,19 @@ const saveEditedEntry = async () => {
         },
       },
       {
-        text: "Take a Photo",
+        text: "Take A Photo",
+
         onPress: async () => {
-          const result = await ImagePicker.launchCameraAsync({
+          const result = await ImagePicker.launchCameraAsync
+          ({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [2, 3],
             quality: 1,
           });
 
-          if (!result.canceled) {
+          if (!result.canceled)
+           {
             setImageUri(result.assets[0].uri);
           }
         },
@@ -286,70 +297,71 @@ const saveEditedEntry = async () => {
     ]);
   };
 
+
   const filterEntries = () => {
     // Convert the search query to lowercase for case-insensitive comparison
     const lowerCaseQuery = searchQuery.toLowerCase().trim();
 
+
     // Filter entries based on search query and date
-    const filteredEntries = entries.filter((entry) => {
+    const filteredEntries = entries.filter((entry) =>
+     {
       const lowerCaseText = entry.text.toLowerCase();
       const lowerCaseTimestamp = entry.timestamp.toLowerCase();
 
       console.log("lowerCaseQuery:", lowerCaseQuery);
       console.log("lowerCaseText:", lowerCaseText);
       console.log("lowerCaseTimestamp:", lowerCaseTimestamp);
+          // Check if the entry text or timestamp contains the search query
+          const textMatch = lowerCaseText.includes(lowerCaseQuery);
+          const dateMatch = lowerCaseTimestamp.includes(lowerCaseQuery);
+          console.log("textMatch:", textMatch);
+          console.log("dateMatch:", dateMatch);
+          return textMatch || dateMatch;
+        });
+        console.log("filteredEntries:", filteredEntries);
+        return filteredEntries;
+      };
 
-      // Check if the entry text or timestamp contains the search query
-      const textMatch = lowerCaseText.includes(lowerCaseQuery);
-      const dateMatch = lowerCaseTimestamp.includes(lowerCaseQuery);
+      return( <ImageBackground source={backgroundImage}
+        style={styles.backgroundImage}>
+         <LinearGradient
+           colors={["rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 0.2)"]}
+           style={styles.gradient}
+         >
+           <View style={styles.container}>
+             <View
+               style={[
+                 styles.searchInput,
+                 searchQuery ? styles.searchInputWithValue : null,
+               ]}
+             >
+               <MaterialCommunityIcons
+                 name="magnify"
+                 style={[
+                   styles.searchIcon,
+                   searchQuery ? styles.searchIconWithValue : null,
 
-      console.log("textMatch:", textMatch);
-      console.log("dateMatch:", dateMatch);
+                 ]}
+               />
+               <TextInput
+                 placeholder="Search entries..."
+                 placeholderTextColor={
+                   searchQuery
+                     ? styles.searchPlaceholderFocused.color
+                     : styles.searchPlaceholder.color
+                 }
+                 onChangeText={(text) => setSearchQuery(text)}
+                 value={searchQuery}
+                 style={[
+                   styles.searchInputText,
+                   searchQuery ? styles.searchInputWithValueFocused : null,
+                 ]}
 
-      return textMatch || dateMatch;
-    });
-
-    console.log("filteredEntries:", filteredEntries);
-    return filteredEntries;
-  };
-
-  return (
-    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-      <LinearGradient
-        colors={["rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 0.2)"]}
-        style={styles.gradient}
-      >
-        <View style={styles.container}>
-          <View
-            style={[
-              styles.searchInput,
-              searchQuery ? styles.searchInputWithValue : null,
-            ]}
-          >
-            <MaterialCommunityIcons
-              name="magnify"
-              style={[
-                styles.searchIcon,
-                searchQuery ? styles.searchIconWithValue : null,
-              ]}
-            />
-            <TextInput
-              placeholder="Search entries..."
-              placeholderTextColor={
-                searchQuery
-                  ? styles.searchPlaceholderFocused.color
-                  : styles.searchPlaceholder.color
-              }
-              onChangeText={(text) => setSearchQuery(text)}
-              value={searchQuery}
-              style={[
-                styles.searchInputText,
-                searchQuery ? styles.searchInputWithValueFocused : null,
-              ]}
-              onFocus={() => setSearchInputFocused(true)}
-              onBlur={() => setSearchInputFocused(false)}
-            />
-          </View>
+                 onFocus={() => setSearchInputFocused(true)}
+                 onBlur={() => setSearchInputFocused(false)}
+               />
+             </View>
 
           <ScrollView
             style={styles.scrollContainer}
@@ -437,6 +449,7 @@ const saveEditedEntry = async () => {
                 ))}
           </ScrollView>
 
+
           <View style={styles.addButtonContainer}>
             <TouchableOpacity
               style={styles.addButton}
@@ -467,9 +480,8 @@ const saveEditedEntry = async () => {
 };
 
 const styles = StyleSheet.create({
-  // ... (other styles)
-
-  searchInput: {
+  searchInput:
+  {
     height: 50,
     paddingHorizontal: 20,
     marginBottom: 20,
@@ -489,37 +501,30 @@ const styles = StyleSheet.create({
     elevation: 5,
     overflow: "hidden",
   },
-
   searchIcon: {
     fontSize: 24,
     color: "white",
     marginRight: 8,
   },
-
   searchInputText: {
     fontSize: 16,
     color: "#fff",
     flex: 1,
     marginLeft: 8,
   },
-
   searchPlaceholder: {
     color: "rgba(255, 255, 255, 0.7)",
     fontSize: 16,
   },
-
   searchInputFocused: {
     borderColor: "#fff",
   },
-
   searchPlaceholderFocused: {
     color: "#fff",
   },
-
   searchInputWithValue: {
     borderColor: "#fff",
   },
-
   searchInputWithValueFocused: {
     borderColor: "#fff",
     shadowColor: "#fff",
@@ -530,20 +535,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 6,
   },
-
-  // Additional styling for when input has text and focus
-  searchInputWithValueFocused: {
-    borderColor: "#fff",
-    shadowColor: "#fff",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 6,
-  },
-
-  // Remaining styles...
   backgroundImage: {
     flex: 1,
     resizeMode: "cover",
@@ -582,14 +573,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   timestamp: {
-    fontSize: 18, // Increased font size
+    fontSize: 18,
     fontWeight: "200",
-    color: "#ffd700", // Dodger Blue text color
+    color: "#ffd700",
   },
   emotion: {
-    fontSize: 34, // Increased font size
+    fontSize: 34,
     marginLeft: 10,
-    color: "white", // Alizarin Crimson text color
+    color: "white",
     shadowColor: "white",
     shadowOffset: {
       width: 1,
@@ -608,7 +599,6 @@ const styles = StyleSheet.create({
     color: "white",
     textTransform: "uppercase",
   },
-
   bodyEntryContainer: {
     flexDirection: "column",
   },
@@ -624,7 +614,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     overflow: "hidden",
     borderWidth: 2,
-    borderColor: "white", // You can change the border color
+    borderColor: "white",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -648,7 +638,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     padding: 20,
-    elevation: 10,
+   // elevation: 10,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
