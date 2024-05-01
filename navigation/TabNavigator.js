@@ -1,16 +1,16 @@
-// navigation/TabNavigator.js
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import HomeScreen from "../Screens/HomeScreen";
 import ProfileScreen from "../Screens/ProfileScreen";
 import DiaryScreen from "../Screens/DiaryScreen";
+import SummaryScreen from "../Screens/SummaryScreen"; // Import the SummaryScreen component
 
 const tabIcons = {
   Home: "home",
   Profile: "person",
-
   Diary: "book",
+  Summary: "book", // Icon for the SummaryScreen
 };
 
 const Tab = createBottomTabNavigator();
@@ -44,7 +44,6 @@ function TabNavigator() {
           ),
         }}
       />
-
       <Tab.Screen
         name="Diary"
         component={DiaryScreen}
@@ -52,6 +51,19 @@ function TabNavigator() {
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
               name={focused ? tabIcons.Diary : `${tabIcons.Diary}-outline`}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Summary" // Name of the SummaryScreen
+        component={SummaryScreen} // Component to render for the SummaryScreen
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons
+              name={focused ? tabIcons.Summary : `${tabIcons.Summary}-outline`}
               size={size}
               color={color}
             />
