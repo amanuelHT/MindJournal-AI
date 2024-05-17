@@ -1,7 +1,5 @@
-import React,
-{ useState, useEffect, useRef } from "react";
-import
- {
+import React, { useState, useEffect, useRef } from "react";
+import {
   View,
   Text,
   TouchableOpacity,
@@ -12,13 +10,9 @@ import
   ImageBackground,
   TextInput,
 } from "react-native";
-import
-
-
-{ LinearGradient } from "expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from "expo-image-picker";
-import
- {
+import {
   collection,
   query,
   where,
@@ -28,8 +22,7 @@ import
   doc,
   updateDoc,
   deleteDoc,
-}
-from "firebase/firestore";
+} from "firebase/firestore";
 import { db, auth } from "../firebase";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AddModalComponent from "../Modals/AddModalComponent";
@@ -96,7 +89,7 @@ const Diary = () => {
           entryList.push({
             id: doc.id,
             text: data.text,
-            timestamp: data.timestamp,
+            timestamp: data.timestamp.toDate().toString(),
             imageUri: data.imageUri,
             emotion: data.emotion,
             location: data.location,
@@ -150,7 +143,7 @@ const Diary = () => {
         await addDoc(diaryCollectionRef, {
           text: newEntry,
           uid: user.uid,
-          timestamp: currentDate,
+          timestamp: new Date(),
           imageUri: imageUri,
           emotion: selectedEmotion,
           location: selectedLocation,
@@ -189,51 +182,45 @@ const Diary = () => {
     setDetailsModalVisible(false);
     EditEntry(entryId);
   };
-//-----//
 
-// edit entry
-const EditEntry = async (entryId) => {
-  try {
-    if (user) {
-      const diaryDocRef = doc(db, "diary", entryId);
-      const docSnapshot = await getDoc(diaryDocRef);
-      const entryData = docSnapshot.data();
+  const EditEntry = async (entryId) => {
+    try {
+      if (user) {
+        const diaryDocRef = doc(db, "diary", entryId);
+        const docSnapshot = await getDoc(diaryDocRef);
+        const entryData = docSnapshot.data();
 
-      if (entryData) {
-        setSelectedEmotion(entryData.emotion || "");
-        setSelectedLocation(entryData.location || "");
-        setNewEntry(entryData.text);
-        setImageUri(entryData.imageUri || null);
+        if (entryData) {
+          setSelectedEmotion(entryData.emotion || "");
+          setSelectedLocation(entryData.location || "");
+          setNewEntry(entryData.text);
+          setImageUri(entryData.imageUri || null);
+        }
       }
+    } catch (error) {
+      console.error("Error fetching diary entry: ", error);
     }
-  } catch (error) {
-    console.error("Error fetching diary entry: ", error);
-  }
-};
+  };
 
-const saveEditedEntry = async () => {
-  try {
-    if (user && selectedEntry) {
-      const diaryDocRef = doc(db, "diary", selectedEntry);
-      await updateDoc(diaryDocRef, {
-        text: newEntry,
-        timestamp: currentDate,
-        imageUri: imageUri,
-        emotion: selectedEmotion,
-        location: selectedLocation,
-      });
+  const saveEditedEntry = async () => {
+    try {
+      if (user && selectedEntry) {
+        const diaryDocRef = doc(db, "diary", selectedEntry);
+        await updateDoc(diaryDocRef, {
+          text: newEntry,
+          timestamp: new Date(),
+          imageUri: imageUri,
+          emotion: selectedEmotion,
+          location: selectedLocation,
+        });
 
-      setDetailsModalVisible(false);
-      fetchEntries();
+        setDetailsModalVisible(false);
+        fetchEntries();
+      }
+    } catch (error) {
+      console.error("Error editing diary entry: ", error);
     }
-  } catch (error) {
-    console.error("Error editing diary entry: ", error);
-  }
-};
-
-  //------//
-
-  //delete press
+  };
 
   const handleDeletePress = (entryId) => {
     deleteEntry(entryId);
@@ -253,10 +240,8 @@ const saveEditedEntry = async () => {
     }
   };
 
-
   const onPhotoPress = async () => {
     Alert.alert("Choose Source", "Select a source for the photo:", [
-
       {
         text: "Choose from Library",
         onPress: async () => {
@@ -274,18 +259,15 @@ const saveEditedEntry = async () => {
       },
       {
         text: "Take A Photo",
-
         onPress: async () => {
-          const result = await ImagePicker.launchCameraAsync
-          ({
+          const result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [2, 3],
             quality: 1,
           });
 
-          if (!result.canceled)
-           {
+          if (!result.canceled) {
             setImageUri(result.assets[0].uri);
           }
         },
@@ -297,71 +279,55 @@ const saveEditedEntry = async () => {
     ]);
   };
 
-
   const filterEntries = () => {
-    // Convert the search query to lowercase for case-insensitive comparison
     const lowerCaseQuery = searchQuery.toLowerCase().trim();
-
-
-    // Filter entries based on search query and date
-    const filteredEntries = entries.filter((entry) =>
-     {
+    const filteredEntries = entries.filter((entry) => {
       const lowerCaseText = entry.text.toLowerCase();
       const lowerCaseTimestamp = entry.timestamp.toLowerCase();
+      const textMatch = lowerCaseText.includes(lowerCaseQuery);
+      const dateMatch = lowerCaseTimestamp.includes(lowerCaseQuery);
+      return textMatch || dateMatch;
+    });
+    return filteredEntries;
+  };
 
-      console.log("lowerCaseQuery:", lowerCaseQuery);
-      console.log("lowerCaseText:", lowerCaseText);
-      console.log("lowerCaseTimestamp:", lowerCaseTimestamp);
-          // Check if the entry text or timestamp contains the search query
-          const textMatch = lowerCaseText.includes(lowerCaseQuery);
-          const dateMatch = lowerCaseTimestamp.includes(lowerCaseQuery);
-          console.log("textMatch:", textMatch);
-          console.log("dateMatch:", dateMatch);
-          return textMatch || dateMatch;
-        });
-        console.log("filteredEntries:", filteredEntries);
-        return filteredEntries;
-      };
-
-      return( <ImageBackground source={backgroundImage}
-        style={styles.backgroundImage}>
-         <LinearGradient
-           colors={["rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 0.2)"]}
-           style={styles.gradient}
-         >
-           <View style={styles.container}>
-             <View
-               style={[
-                 styles.searchInput,
-                 searchQuery ? styles.searchInputWithValue : null,
-               ]}
-             >
-               <MaterialCommunityIcons
-                 name="magnify"
-                 style={[
-                   styles.searchIcon,
-                   searchQuery ? styles.searchIconWithValue : null,
-
-                 ]}
-               />
-               <TextInput
-                 placeholder="Search entries..."
-                 placeholderTextColor={
-                   searchQuery
-                     ? styles.searchPlaceholderFocused.color
-                     : styles.searchPlaceholder.color
-                 }
-                 onChangeText={(text) => setSearchQuery(text)}
-                 value={searchQuery}
-                 style={[
-                   styles.searchInputText,
-                   searchQuery ? styles.searchInputWithValueFocused : null,
-                 ]}
-
-                 onFocus={() => setSearchInputFocused(true)}
-                 onBlur={() => setSearchInputFocused(false)}
-               />
-             </View>
+  return (
+    <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+      <LinearGradient
+        colors={["rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 0.2)"]}
+        style={styles.gradient}
+      >
+        <View style={styles.container}>
+          <View
+            style={[
+              styles.searchInput,
+              searchQuery ? styles.searchInputWithValue : null,
+            ]}
+          >
+            <MaterialCommunityIcons
+              name="magnify"
+              style={[
+                styles.searchIcon,
+                searchQuery ? styles.searchIconWithValue : null,
+              ]}
+            />
+            <TextInput
+              placeholder="Search entries..."
+              placeholderTextColor={
+                searchQuery
+                  ? styles.searchPlaceholderFocused.color
+                  : styles.searchPlaceholder.color
+              }
+              onChangeText={(text) => setSearchQuery(text)}
+              value={searchQuery}
+              style={[
+                styles.searchInputText,
+                searchQuery ? styles.searchInputWithValueFocused : null,
+              ]}
+              onFocus={() => setSearchInputFocused(true)}
+              onBlur={() => setSearchInputFocused(false)}
+            />
+          </View>
 
           <ScrollView
             style={styles.scrollContainer}
@@ -389,7 +355,18 @@ const saveEditedEntry = async () => {
                       onPress={() => setExpandedEntryId(entry.id)}
                     >
                       <View style={styles.topEntryContainer}>
-                        <Text style={styles.timestamp}>{entry.timestamp}</Text>
+                        <Text style={styles.timestamp}>
+                          {new Date(entry.timestamp).toLocaleString("en-US", {
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            second: "numeric",
+                            hour12: true,
+                          })}
+                        </Text>
                         <Text style={styles.emotion}>{entry.emotion}</Text>
                         <Text style={styles.location}>{entry.location}</Text>
                       </View>
@@ -428,7 +405,18 @@ const saveEditedEntry = async () => {
                       onPress={() => setExpandedEntryId(entry.id)}
                     >
                       <View style={styles.topEntryContainer}>
-                        <Text style={styles.timestamp}>{entry.timestamp}</Text>
+                        <Text style={styles.timestamp}>
+                          {new Date(entry.timestamp).toLocaleString("en-US", {
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            second: "numeric",
+                            hour12: true,
+                          })}
+                        </Text>
                         <Text style={styles.emotion}>{entry.emotion}</Text>
                         <Text style={styles.location}>{entry.location}</Text>
                       </View>
@@ -448,7 +436,6 @@ const saveEditedEntry = async () => {
                   </TouchableOpacity>
                 ))}
           </ScrollView>
-
 
           <View style={styles.addButtonContainer}>
             <TouchableOpacity
@@ -480,8 +467,7 @@ const saveEditedEntry = async () => {
 };
 
 const styles = StyleSheet.create({
-  searchInput:
-  {
+  searchInput: {
     height: 50,
     paddingHorizontal: 20,
     marginBottom: 20,
@@ -638,7 +624,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     padding: 20,
-   // elevation: 10,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
