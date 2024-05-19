@@ -37,7 +37,7 @@ exports.summarizeWeeklyEntries = functions.pubsub.schedule('every 168 hours').on
     const lockRef = admin.firestore().collection(LOCK_COLLECTION).doc(LOCK_DOCUMENT);
 
     try {
-        // Locking Mechanism
+        //--- Locking Mechanism
         const lockAcquired = await admin.firestore().runTransaction(async (transaction) => {
             const lockDoc = await transaction.get(lockRef);
             if (lockDoc.exists && lockDoc.data().timestamp.toDate().getTime() > now.toDate().getTime() - 60000) {
@@ -108,7 +108,7 @@ exports.summarizeWeeklyEntries = functions.pubsub.schedule('every 168 hours').on
     } catch (error) {
         console.error('Error processing diary entries:', error);
     } finally {
-        // lock release 
+        //-- lock release 
         await lockRef.delete();
     }
 });
@@ -124,7 +124,7 @@ exports.summarizeYearlyEntries  = functions.pubsub.schedule('every 8760 hours').
     const lockRef = admin.firestore().collection(LOCK_COLLECTION).doc(YEARLY_LOCK_DOCUMENT);
 
     try {
-        // Locking Mechanism
+        //-- Locking Mechanism
         const lockAcquired = await admin.firestore().runTransaction(async (transaction) => {
             const lockDoc = await transaction.get(lockRef);
             if (lockDoc.exists && lockDoc.data().timestamp.toDate().getTime() > now.toDate().getTime() - 60000) {
@@ -195,7 +195,7 @@ exports.summarizeYearlyEntries  = functions.pubsub.schedule('every 8760 hours').
         console.error('Error processing diary entries:', error);
     
     } finally {
-        // lock release 
+        //--- lock release 
         await lockRef.delete();
     }
 });
