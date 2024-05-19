@@ -193,6 +193,7 @@ exports.summarizeYearlyEntries  = functions.pubsub.schedule('every 8760 hours').
 
     } catch (error) {
         console.error('Error processing diary entries:', error);
+    
     } finally {
         // lock release 
         await lockRef.delete();
