@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// src/Screens/HomeScreen.js
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -10,10 +11,10 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
 import { LinearGradient } from "expo-linear-gradient";
 import { db } from "../firebase"; // Import your Firebase firestore instance
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
+import { auth } from "../firebase"; // Import Firebase auth
 
 const HomeScreen = () => {
   const [diaryEntry, setDiaryEntry] = useState(null);
@@ -52,6 +53,7 @@ const HomeScreen = () => {
       console.error("Error fetching random diary entry:", error.message);
     }
   };
+
   const formatDateString = () => {
     const startYear = 1900;
     const currentYear = new Date().getFullYear();
@@ -77,6 +79,12 @@ const HomeScreen = () => {
     navigation.navigate("Login");
   };
 
+  const handleSignOut = () => {
+    auth.signOut().then(() => {
+      navigation.navigate("Home");
+    });
+  };
+
   return (
     <ImageBackground
       source={require("../images/background1.jpg")}
@@ -98,15 +106,25 @@ const HomeScreen = () => {
                 <Text style={styles.quoteText}>{diaryEntry.RandomD}</Text>
               )}
               <View style={styles.buttonContainer}>
-                <TouchableHighlight
-                  underlayColor="#3498db"
-                  onPress={goToSignIn}
-                  style={styles.linkButton}
-                >
-                  <Text style={styles.linkText}>
-                    Log in. Write. Reflect. Your digital diary, your story.
-                  </Text>
-                </TouchableHighlight>
+                {auth.currentUser ? (
+                  <TouchableHighlight
+                    underlayColor="#3498db"
+                    onPress={handleSignOut}
+                    style={styles.linkButton}
+                  >
+                    <Text style={styles.linkText}>Logout</Text>
+                  </TouchableHighlight>
+                ) : (
+                  <TouchableHighlight
+                    underlayColor="#3498db"
+                    onPress={goToSignIn}
+                    style={styles.linkButton}
+                  >
+                    <Text style={styles.linkText}>
+                      Log in. Write. Reflect. Your digital diary, your story.
+                    </Text>
+                  </TouchableHighlight>
+                )}
               </View>
             </Animated.View>
           </View>

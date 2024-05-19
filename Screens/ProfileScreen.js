@@ -6,15 +6,13 @@ import {
   StyleSheet,
   Image,
   Alert,
-} 
-from "react-native";
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { auth, db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
-const ProfileScreen = ({ navigation }) => 
-{
+const ProfileScreen = ({ navigation }) => {
   const [user, setUser] = useState(null);
   const [name, setName] = useState("");
   const [profilePic, setProfilePic] = useState("");
@@ -39,7 +37,12 @@ const ProfileScreen = ({ navigation }) =>
             }
           } else {
             console.log("Profile document does not exist for user:", user.uid);
+            // Optionally create a default profile document here
+            const defaultProfile = { name: "", profilePic: "" };
+            await setDoc(profileDocRef, defaultProfile);
+            console.log("Default profile created for user:", user.uid);
           }
+          
         } catch (error) {
           console.error("Error fetching profile data:", error);
         }
@@ -48,8 +51,7 @@ const ProfileScreen = ({ navigation }) =>
 
     return () => unsubscribe();
   }, [navigation]);
-  const handleSignOut = async () =>
-   {
+  const handleSignOut = async () => {
     try {
       await auth.signOut();
       setUser("");
@@ -133,11 +135,12 @@ const ProfileScreen = ({ navigation }) =>
       await setDoc(profileDocRef, {
         ...dataToUpdate,
         userId: user.uid,
-      });
+      }, { merge: true }); // Use merge option to avoid overwriting existing fields
     } catch (error) {
       console.error("Error updating profile data:", error);
     }
   };
+  
 
   return (
     <LinearGradient

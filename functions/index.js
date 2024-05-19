@@ -1,4 +1,3 @@
-
 //require('dotenv').config()
 const functions = require('firebase-functions');
 const { onRequest } = require("firebase-functions/v2/https");
@@ -12,7 +11,7 @@ const db = admin.firestore();
 
 const openaiApiKey = functions.config().openai?.key || process.env.OPENAI_API_KEY;
 
-// Ensure API key is available
+
 if (!openaiApiKey) {
     console.error("The OPENAI_API_KEY environment variable is missing.");
     throw new Error("The OPENAI_API_KEY environment variable is missing.");
@@ -23,22 +22,22 @@ const openai = new OpenAI({
 });
 
 //exports.helloWorld = functions.https.onRequest((request, response) => {
-//   response.send("Hello from Firebase!");});
+//response.send("Hello from Firebase!");});
 
 const LOCK_COLLECTION = 'locks';
 const LOCK_DOCUMENT = 'summarizeEntriesLock';
 
-exports.summarizeEntries = functions.pubsub.schedule('every 1 minutes').onRun(async (context) => {
+exports.summarizeWeeklyEntries = functions.pubsub.schedule('every 168 hours').onRun(async (context) => {
     const now = admin.firestore.Timestamp.now();
-    const oneMinuteAgo = admin.firestore.Timestamp.fromDate(new Date(now.toDate().getTime() - 60000));
+    const oneWeekAgo  = admin.firestore.Timestamp.fromDate(new Date(now.toDate().getTime() - 7 * 24 * 60 * 60 * 1000));
 
     console.log(`Current time (UTC): ${now.toDate().toISOString()}`);
-    console.log(`Querying entries created since (UTC): ${oneMinuteAgo.toDate().toISOString()}`);
+    console.log(`Querying entries created since (UTC): ${oneWeekAgo.toDate().toISOString()}`);
 
     const lockRef = admin.firestore().collection(LOCK_COLLECTION).doc(LOCK_DOCUMENT);
 
     try {
-        // Try to acquire the lock atomically
+        // Locking Mechanism
         const lockAcquired = await admin.firestore().runTransaction(async (transaction) => {
             const lockDoc = await transaction.get(lockRef);
             if (lockDoc.exists && lockDoc.data().timestamp.toDate().getTime() > now.toDate().getTime() - 60000) {
@@ -54,11 +53,11 @@ exports.summarizeEntries = functions.pubsub.schedule('every 1 minutes').onRun(as
         }
 
         const snapshot = await admin.firestore().collection('diary')
-            .where('timestamp', '>=', oneMinuteAgo)
+            .where('timestamp', '>=', oneWeekAgo)
             .get();
 
         if (snapshot.empty) {
-            console.log('No diary entries found for the last minute.');
+            console.log('No diary entries found for the last week.');
             return null;
         }
 
@@ -71,7 +70,6 @@ exports.summarizeEntries = functions.pubsub.schedule('every 1 minutes').onRun(as
             entriesByUser[uid].push(text);
         });
 
-        //const openai = require('openai');
 
         for (const [uid, texts] of Object.entries(entriesByUser)) {
             const concatenatedTexts = texts.join('\n\n');
@@ -110,28 +108,27 @@ exports.summarizeEntries = functions.pubsub.schedule('every 1 minutes').onRun(as
     } catch (error) {
         console.error('Error processing diary entries:', error);
     } finally {
-        // Release the lock
+        // lock release 
         await lockRef.delete();
     }
 });
 
 
-/*
-exports.summarizeEntries = functions.pubsub.schedule('every 1 minutes').onRun(async (context) => {
+exports.summarizeYearlyEntries  = functions.pubsub.schedule('every 8760 hours').onRun(async (context) => {
     const now = admin.firestore.Timestamp.now();
-    const oneMinuteAgo = admin.firestore.Timestamp.fromDate(new Date(now.toDate().getTime() - 60000));
+    const oneWeekAgo  = admin.firestore.Timestamp.fromDate(new Date(now.toDate().getTime() - 365 * 24 * 60 * 60 * 1000));
 
     console.log(`Current time (UTC): ${now.toDate().toISOString()}`);
-    console.log(`Querying entries created since (UTC): ${oneMinuteAgo.toDate().toISOString()}`);
+    console.log(`Querying weekly summaries created since (UTC): ${oneYearAgo.toDate().toISOString()}`);
 
-    const lockRef = admin.firestore().collection(LOCK_COLLECTION).doc(LOCK_DOCUMENT);
+    const lockRef = admin.firestore().collection(LOCK_COLLECTION).doc(YEARLY_LOCK_DOCUMENT);
 
     try {
-        // Try to acquire the lock atomically
+        // Locking Mechanism
         const lockAcquired = await admin.firestore().runTransaction(async (transaction) => {
             const lockDoc = await transaction.get(lockRef);
             if (lockDoc.exists && lockDoc.data().timestamp.toDate().getTime() > now.toDate().getTime() - 60000) {
-                console.log('Another summarization process is already running.');
+                console.log('Another yearly summarization process is already running.');
                 return false;
             }
             transaction.set(lockRef, { timestamp: now });
@@ -142,126 +139,62 @@ exports.summarizeEntries = functions.pubsub.schedule('every 1 minutes').onRun(as
             return null;
         }
 
-        const snapshot = await admin.firestore().collection('diary')
-            .where('created', '>=', oneMinuteAgo)
+        const snapshot = await admin.firestore().collection('summaries')
+            .where('timestamp', '>=', oneYearAgo)
             .get();
 
         if (snapshot.empty) {
-            console.log('No diary entries found for the last minute.');
+            console.log('No weekly summaries found for the last year.');
             return null;
         }
 
-        const entries = snapshot.docs.map(doc => ({
-            id: doc.id,
-            uid: doc.data().uid,
-            text: doc.data().text
-        }));
-
-        if (entries.length === 0) {
-            console.log('No text entries to summarize.');
-            return null;
-        }
-
-        const texts = entries.map(entry => entry.text).join('\n\n');
-        console.log(`Diary entries found: ${texts}`);
-    
-        try {
-            const completion = await openai.completions.create({
-                model: "gpt-3.5-turbo-instruct",
-                prompt: `Summarize these diary entries:\n\n${texts}`,
-                max_tokens: 200
-            });
-
-            if (!completion || !completion.choices || completion.choices.length === 0) {
-                throw new Error('Unexpected OpenAI API response format');
+        const entriesByUser = {};
+        snapshot.docs.forEach(doc => {
+            const { uid, text } = doc.data();
+            if (!entriesByUser[uid]) {
+                entriesByUser[uid] = [];
             }
+            entriesByUser[uid].push(text);
+        });
 
-            const summary = completion.choices[0].text.trim();
-            console.log(`Generated summary: ${summary}`);
+        for (const [uid, texts] of Object.entries(entriesByUser)) {
+            const concatenatedTexts = texts.join('\n\n');
+            console.log(`Diary entries for UID ${uid}: ${concatenatedTexts}`);
 
-            if (summary) {
-                const batch = admin.firestore().batch();
-                for (const entry of entries) {
+            try {
+                const completion = await openai.completions.create({
+                    model: "gpt-3.5-turbo-instruct",
+                    prompt: `Summarize these weekly summaries like the user wrote:\n\n${concatenatedTexts}`,
+                    max_tokens: 200
+                });
+
+                if (!completion || !completion.choices || completion.choices.length === 0) {
+                    throw new Error('Unexpected OpenAI API response format');
+                }
+
+                const summary = completion.choices[0].text.trim();
+                console.log(`Generated yearly summary for UID  ${uid}: ${summary}`);
+
+                if (summary) {
                     const summaryRef = admin.firestore().collection('summaries').doc();
-                    batch.set(summaryRef, {
-                        diaryEntryId: entry.id,
-                        uid: entry.uid,
+                    await summaryRef.set({
+                        uid: uid,
                         text: summary,
                         created: admin.firestore.FieldValue.serverTimestamp()
                     });
+                    console.log(`Summary for UID ${uid} successfully stored in Firestore`);
+                } else {
+                    console.log(`Generated summary for UID ${uid} is empty, no text to store in Firestore.`);
                 }
-                await batch.commit();
-                console.log('Summary successfully stored in Firestore');
-            } else {
-                console.log('Generated summary is empty, no text to store in Firestore.');
+            } catch (apiError) {
+                console.error(`Error with OpenAI API for UID ${uid}:`, apiError);
             }
-        } catch (apiError) {
-            console.error('Error with OpenAI API:', apiError);
         }
 
     } catch (error) {
         console.error('Error processing diary entries:', error);
     } finally {
-        // Release the lock
+        // lock release 
         await lockRef.delete();
     }
 });
-*/
-
-/*exports.summarizeEntries = functions.pubsub.schedule('every 1 minutes').onRun(async (context) => {
-    const now = admin.firestore.Timestamp.now();
-    const oneMinuteAgo = admin.firestore.Timestamp.fromDate(new Date(now.toDate().getTime() - 60000));
-  
-    console.log(`Current time (UTC): ${now.toDate().toISOString()}`);
-    console.log(`Querying entries created since (UTC): ${oneMinuteAgo.toDate().toISOString()}`);
-  
-    try {
-      const snapshot = await admin.firestore().collection('diary')
-        .where('created', '>=', oneMinuteAgo)
-        .get();
-  
-      if (snapshot.empty) {
-        console.log('No diary entries found for the last minute.');
-        return null;
-      }
-  
-      const entries = snapshot.docs.map(doc => ({
-        id: doc.id,
-        uid: doc.data().uid,
-        text: doc.data().text
-      }));
-  
-      if (entries.length === 0) {
-        console.log('No text entries to summarize.');
-        return null;
-      }
-  
-      const texts = entries.map(entry => entry.text).join('\n\n');
-      console.log(`Diary entries found: ${texts}`);
-  
-      const completion = await openai.completions.create({
-        model: "gpt-3.5-turbo-instruct",
-        prompt: `Summarize these diary entries:\n\n${texts}`,
-        max_tokens: 200
-      });
-  
-      const summary = completion.choices[0].text.trim();
-      console.log(`Generated summary: ${summary}`);
-  
-      if (summary) {
-        for (const entry of entries) {
-          await admin.firestore().collection('summaries').add({
-            diaryEntryId: entry.id,
-            uid: entry.uid,
-            text: summary,
-            created: admin.firestore.FieldValue.serverTimestamp()
-          });
-        }
-        console.log('Summary successfully stored in Firestore');
-      } else {
-        console.log('Generated summary is empty, no text to store in Firestore.');
-      }
-    } catch (error) {
-      console.error('Error processing diary entries:', error);
-    }
-  });*/
