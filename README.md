@@ -1,3 +1,7 @@
+npx expo start --tunnel
+
+
+
 Creating a Jira sprint plan involves breaking down the tasks in your code into manageable pieces and organizing them into a coherent workflow for your development team. The code you've provided is a React Native component for a diary application with various functionalities like adding, editing, deleting diary entries, handling image uploads, and searching through entries. Let's break this down into a series of tasks:
 
 ### Epic: Diary Application Development

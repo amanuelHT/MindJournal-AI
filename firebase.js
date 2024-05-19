@@ -17,9 +17,13 @@ const firebaseConfig = {
   measurementId: "G-QWX5QE6PH5",
 };
 
+// Initialize Firebase App
 const app = initializeApp(firebaseConfig);
+
+// Get Firestore Instance
 const db = getFirestore(app);
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-});
+
+// Get Firebase Auth Instance
+const auth = getAuth(app);
+
 export { db, auth };

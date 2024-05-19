@@ -89,7 +89,7 @@ const Diary = () => {
           entryList.push({
             id: doc.id,
             text: data.text,
-            timestamp: data.timestamp,
+            timestamp: data.timestamp.toDate().toString(),
             imageUri: data.imageUri,
             emotion: data.emotion,
             location: data.location,
@@ -144,7 +144,7 @@ const Diary = () => {
         await addDoc(diaryCollectionRef, {
           text: newEntry,
           uid: user.uid,
-          timestamp: currentDate,
+          timestamp: new Date(),
           imageUri: imageUri,
           emotion: selectedEmotion,
           location: selectedLocation,
@@ -183,9 +183,7 @@ const Diary = () => {
     setDetailsModalVisible(false);
     EditEntry(entryId);
   };
-  //-----//
 
-  // edit entry
   const EditEntry = async (entryId) => {
     try {
       if (user) {
@@ -211,7 +209,7 @@ const Diary = () => {
         const diaryDocRef = doc(db, "diary", selectedEntry);
         await updateDoc(diaryDocRef, {
           text: newEntry,
-          timestamp: currentDate,
+          timestamp: new Date(),
           imageUri: imageUri,
           emotion: selectedEmotion,
           location: selectedLocation,
@@ -224,10 +222,6 @@ const Diary = () => {
       console.error("Error editing diary entry: ", error);
     }
   };
-
-  //------//
-
-  //delete press
 
   const handleDeletePress = (entryId) => {
     deleteEntry(entryId);
@@ -266,7 +260,6 @@ const Diary = () => {
       },
       {
         text: "Take A Photo",
-
         onPress: async () => {
           const result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -288,25 +281,14 @@ const Diary = () => {
   };
 
   const filterEntries = () => {
-    // Convert the search query to lowercase for case-insensitive comparison
     const lowerCaseQuery = searchQuery.toLowerCase().trim();
-
-    // Filter entries based on search query and date
     const filteredEntries = entries.filter((entry) => {
       const lowerCaseText = entry.text.toLowerCase();
       const lowerCaseTimestamp = entry.timestamp.toLowerCase();
-
-      console.log("lowerCaseQuery:", lowerCaseQuery);
-      console.log("lowerCaseText:", lowerCaseText);
-      console.log("lowerCaseTimestamp:", lowerCaseTimestamp);
-      // Check if the entry text or timestamp contains the search query
       const textMatch = lowerCaseText.includes(lowerCaseQuery);
       const dateMatch = lowerCaseTimestamp.includes(lowerCaseQuery);
-      console.log("textMatch:", textMatch);
-      console.log("dateMatch:", dateMatch);
       return textMatch || dateMatch;
     });
-    console.log("filteredEntries:", filteredEntries);
     return filteredEntries;
   };
 
@@ -374,7 +356,18 @@ const Diary = () => {
                       onPress={() => setExpandedEntryId(entry.id)}
                     >
                       <View style={styles.topEntryContainer}>
-                        <Text style={styles.timestamp}>{entry.timestamp}</Text>
+                        <Text style={styles.timestamp}>
+                          {new Date(entry.timestamp).toLocaleString("en-US", {
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            second: "numeric",
+                            hour12: true,
+                          })}
+                        </Text>
                         <Text style={styles.emotion}>{entry.emotion}</Text>
                         <Text style={styles.location}>{entry.location}</Text>
                       </View>
@@ -413,7 +406,18 @@ const Diary = () => {
                       onPress={() => setExpandedEntryId(entry.id)}
                     >
                       <View style={styles.topEntryContainer}>
-                        <Text style={styles.timestamp}>{entry.timestamp}</Text>
+                        <Text style={styles.timestamp}>
+                          {new Date(entry.timestamp).toLocaleString("en-US", {
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            second: "numeric",
+                            hour12: true,
+                          })}
+                        </Text>
                         <Text style={styles.emotion}>{entry.emotion}</Text>
                         <Text style={styles.location}>{entry.location}</Text>
                       </View>
@@ -621,7 +625,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     padding: 20,
-    // elevation: 10,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
