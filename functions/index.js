@@ -79,7 +79,7 @@ exports.summarizeWeeklyEntries = functions.pubsub.schedule('every 168 hours').on
                 const completion = await openai.completions.create({
                     model: "gpt-3.5-turbo-instruct",
                     prompt: `Summarize these diary entries like the user wrote:\n\n${concatenatedTexts}`,
-                    max_tokens: 200
+                    max_tokens: 2500
                 });
 
                 if (!completion || !completion.choices || completion.choices.length === 0) {
@@ -165,7 +165,7 @@ exports.summarizeYearlyEntries  = functions.pubsub.schedule('every 8760 hours').
                 const completion = await openai.completions.create({
                     model: "gpt-3.5-turbo-instruct",
                     prompt: `Summarize these weekly summaries like the user wrote:\n\n${concatenatedTexts}`,
-                    max_tokens: 200
+                    max_tokens: 3096
                 });
 
                 if (!completion || !completion.choices || completion.choices.length === 0) {
@@ -195,7 +195,7 @@ exports.summarizeYearlyEntries  = functions.pubsub.schedule('every 8760 hours').
         console.error('Error processing diary entries:', error);
     
     } finally {
-        //--- lock release 
+        //--- lock release
         await lockRef.delete();
     }
 });

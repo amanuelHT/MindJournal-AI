@@ -13,7 +13,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 import { LinearGradient } from "expo-linear-gradient";
 
-// Import your background image (replace with the actual path)
 const backgroundImage = require("../images/background1.jpg");
 
 const SignUpScreen = ({ navigation }) => {
@@ -21,14 +20,12 @@ const SignUpScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   const handleSignUp = async () => {
-    console.log("Handle Sign Up Clicked");
     try {
       if (email.trim() === "" || password.trim() === "") {
         alert("Please fill in both email and password.");
         return;
       }
 
-      // Create a new user with Firebase
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -36,15 +33,15 @@ const SignUpScreen = ({ navigation }) => {
       );
       const user = userCredential.user;
 
-      // Store user data in Firestore
       await addDoc(collection(db, "users"), {
         uid: user.uid,
         email: user.email,
-        // Add more user data if needed
       });
 
-      // Handle successful signup, e.g., navigate to a new screen
-      navigation.navigate("Diary"); // Replace 'Home' with the appropriate screen name
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Tabs" }],
+      });
     } catch (error) {
       alert(error.message);
     }
@@ -113,12 +110,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-  },
-  animation: {
-    width: 150,
-    height: 150,
-    position: "absolute", // Add this line to position the animation absolutely
-    bottom: 20, // Adjust this value to move the animation up from the bottom
   },
   title: {
     fontSize: 36,

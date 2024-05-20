@@ -1,5 +1,4 @@
-// src/Screens/HomeScreen.js
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,27 +8,59 @@ import {
   TouchableHighlight,
   Animated,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import LottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { db } from "../firebase"; // Import your Firebase firestore instance
-import { collection, getDocs, query } from "firebase/firestore";
-import { auth } from "../firebase"; // Import Firebase auth
+import { auth, db } from "../firebase"; // Import your Firebase auth and firestore instance
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const HomeScreen = () => {
   const [diaryEntry, setDiaryEntry] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentDate, setCurrentDate] = useState("");
   const navigation = useNavigation();
   const fadeAnim = new Animated.Value(0);
 
   useEffect(() => {
-    fetchRandomDiaryEntry();
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setIsLoggedIn(true);
+        setUserId(user.uid);
+        fetchRandomDiaryEntry(user.uid);
+      } else {
+        setIsLoggedIn(false);
+        setUserId(null);
+        setDiaryEntry(null);
+        setLoading(false);
+      }
+    });
+
+    setCurrentDate(new Date().toLocaleDateString()); // Set the current date
     fadeIn();
+
+    return unsubscribe;
   }, []);
 
-  const fetchRandomDiaryEntry = async () => {
+  useEffect(() => {
+    let interval;
+    if (userId) {
+      interval = setInterval(() => {
+        fetchRandomDiaryEntry(userId);
+      }, 10000); // 10 seconds
+    }
+
+    return () => clearInterval(interval);
+  }, [userId]);
+
+  const fetchRandomDiaryEntry = async (uid) => {
+    setLoading(true);
     try {
-      const diaryRandomCollectionRef = collection(db, "RandomDiary");
-      const q = query(diaryRandomCollectionRef);
+      const diaryCollectionRef = collection(db, "diary");
+      const q = query(diaryCollectionRef, where("uid","==",uid));
 
       const querySnapshot = await getDocs(q);
 
@@ -38,33 +69,26 @@ const HomeScreen = () => {
         const data = doc.data();
         entryList.push({
           id: doc.id,
-          RandomD: data.RandomD,
+          text: data.text,
         });
       });
 
-      // Shuffle the entries to make them random
-      const shuffledEntries = entryList.sort(() => Math.random() - 0.5);
+      if (entryList.length > 0) {
+        // Shuffle the entries to make them random
+        const shuffledEntries = entryList.sort(() => Math.random() - 0.5);
 
-      // Get the first entry (you can modify this to get a different random entry)
-      const randomEntry = shuffledEntries[0];
+        // Get the first entry (constant random entry for session)
+        const randomEntry = shuffledEntries[0];
 
-      setDiaryEntry(randomEntry);
+        setDiaryEntry(randomEntry);
+      } else {
+        setDiaryEntry(null);
+      }
     } catch (error) {
       console.error("Error fetching random diary entry:", error.message);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const formatDateString = () => {
-    const startYear = 1900;
-    const currentYear = new Date().getFullYear();
-
-    const randomYear =
-      Math.floor(Math.random() * (currentYear - startYear + 1)) + startYear;
-    const randomMonth = Math.floor(Math.random() * 12) + 1;
-    const randomDay = Math.floor(Math.random() * 28) + 1; // Assuming all months have 28 days for simplicity
-
-    const formattedDate = new Date(randomYear, randomMonth - 1, randomDay);
-    return formattedDate.toDateString();
   };
 
   const fadeIn = () => {
@@ -77,12 +101,6 @@ const HomeScreen = () => {
 
   const goToSignIn = () => {
     navigation.navigate("Login");
-  };
-
-  const handleSignOut = () => {
-    auth.signOut().then(() => {
-      navigation.navigate("Home");
-    });
   };
 
   return (
@@ -100,21 +118,24 @@ const HomeScreen = () => {
         >
           <View style={styles.container}>
             <Animated.View style={[styles.overlay, { opacity: fadeAnim }]}>
-              <View style={styles.animationContainer}></View>
-              <Text style={styles.title}>{formatDateString()}</Text>
-              {diaryEntry && (
-                <Text style={styles.quoteText}>{diaryEntry.RandomD}</Text>
+              <View style={styles.animationContainer}>
+                <LottieView
+                  source={require("../images/pen.json")}
+                  autoPlay
+                  loop
+                  style={styles.animation}
+                />
+              </View>
+              <Text style={styles.title}>{currentDate}</Text>
+              {loading ? (
+                <ActivityIndicator size="large" color="#ffffff" />
+              ) : diaryEntry ? (
+                <Text style={styles.quoteText}>{diaryEntry.text}</Text>
+              ) : (
+                <Text style={styles.quoteText}></Text>
               )}
-              <View style={styles.buttonContainer}>
-                {auth.currentUser ? (
-                  <TouchableHighlight
-                    underlayColor="#3498db"
-                    onPress={handleSignOut}
-                    style={styles.linkButton}
-                  >
-                    <Text style={styles.linkText}>Logout</Text>
-                  </TouchableHighlight>
-                ) : (
+              {!isLoggedIn && (
+                <View style={styles.buttonContainer}>
                   <TouchableHighlight
                     underlayColor="#3498db"
                     onPress={goToSignIn}
@@ -124,8 +145,8 @@ const HomeScreen = () => {
                       Log in. Write. Reflect. Your digital diary, your story.
                     </Text>
                   </TouchableHighlight>
-                )}
-              </View>
+                </View>
+              )}
             </Animated.View>
           </View>
         </ScrollView>
@@ -172,11 +193,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 20,
   },
-
+  animation: {
+    width: 200,
+    height: 200,
+  },
   title: {
     fontSize: 24,
     color: "#fff",
-
     marginBottom: 10,
     textAlign: "center",
   },
@@ -184,7 +207,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
     color: "#fff",
-
     fontStyle: "italic",
     lineHeight: 28,
     textShadowColor: "rgba(0, 0, 0, 0.5)",

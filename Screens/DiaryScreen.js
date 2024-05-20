@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: "100%",
+    height: "130%",
   },
   container: {
     marginBottom: 20,
