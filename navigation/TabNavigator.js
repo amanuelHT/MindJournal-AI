@@ -4,13 +4,13 @@ import { Ionicons } from "@expo/vector-icons";
 import HomeScreen from "../Screens/HomeScreen";
 import ProfileScreen from "../Screens/ProfileScreen";
 import DiaryScreen from "../Screens/DiaryScreen";
-import SummaryScreen from "../Screens/SummaryScreen"; // Import the SummaryScreen component
+import SummaryScreen from "../Screens/SummaryScreen";
 
 const tabIcons = {
   Home: "home",
   Profile: "person",
-  Diary: "create",
-  Summary: "book", // Icon for the SummaryScreen
+  Diary: "book",
+  Summary: "book",
 };
 
 const Tab = createBottomTabNavigator();
@@ -58,8 +58,8 @@ function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Summary" // Name of the SummaryScreen
-        component={SummaryScreen} // Component to render for the SummaryScreen
+        name="Summary"
+        component={SummaryScreen}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons

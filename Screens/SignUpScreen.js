@@ -8,7 +8,7 @@ import {
   StyleSheet,
   ImageBackground,
 } from "react-native";
-import { auth, db } from "../firebase"; // Import Firebase configuration
+import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 import { LinearGradient } from "expo-linear-gradient";

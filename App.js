@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, ImageBackground } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { auth } from "./firebase"; // Import Firebase auth
+import { auth } from "./firebase";
 import TabNavigator from "./navigation/TabNavigator";
 import HomeScreen from "./Screens/HomeScreen";
 import LoginScreen from "./Screens/LoginScreen";
@@ -17,7 +17,7 @@ export default function App() {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setIsSignedIn(!!user);
     });
-    return unsubscribe; // Clean up the subscription
+    return unsubscribe;
   }, []);
 
   return (

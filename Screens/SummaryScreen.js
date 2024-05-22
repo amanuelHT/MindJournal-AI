@@ -1,12 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, ImageBackground, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { db } from '../firebase';
-import { collection, query, orderBy, onSnapshot, where, doc, updateDoc, deleteDoc, getDoc, getDocs } from 'firebase/firestore';
+import {
+  ScrollView,
+  View,
+  Text,
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { db } from "../firebase";
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  where,
+  doc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  getDocs,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AddModalComponent from "../Modals/AddModalComponent";
 import DetailsModal from "../Modals/DetailsModal";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 
 const SummaryScreen = ({ navigation }) => {
   const [summaries, setSummaries] = useState([]);
@@ -28,13 +47,17 @@ const SummaryScreen = ({ navigation }) => {
 
   const loadSummaries = (uid) => {
     const summariesRef = collection(db, "summaries");
-    const q = query(summariesRef, where("uid", "==", uid), orderBy("created", "desc"));
+    const q = query(
+      summariesRef,
+      where("uid", "==", uid),
+      orderBy("created", "desc")
+    );
 
     return onSnapshot(q, (querySnapshot) => {
       if (!querySnapshot.empty) {
-        const summariesList = querySnapshot.docs.map(doc => ({
+        const summariesList = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
         }));
         setSummaries(summariesList);
       } else {
@@ -133,12 +156,16 @@ const SummaryScreen = ({ navigation }) => {
   const fetchSummaries = async () => {
     if (user) {
       const summariesRef = collection(db, "summaries");
-      const q = query(summariesRef, where("uid", "==", user.uid), orderBy("created", "desc"));
+      const q = query(
+        summariesRef,
+        where("uid", "==", user.uid),
+        orderBy("created", "desc")
+      );
 
       const querySnapshot = await getDocs(q);
-      const summariesList = querySnapshot.docs.map(doc => ({
+      const summariesList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
       setSummaries(summariesList);
     } else {
@@ -162,7 +189,7 @@ const SummaryScreen = ({ navigation }) => {
 
   return (
     <ImageBackground
-      source={require('../images/background1.jpg')}
+      source={require("../images/background1.jpg")}
       style={styles.backgroundImage}
     >
       <LinearGradient
@@ -172,47 +199,49 @@ const SummaryScreen = ({ navigation }) => {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.container}>
             <Text style={styles.title}>Summaries:</Text>
-            {summaries.length > 0 && typeof summaries[0] === 'object' ? summaries.map((summary) => (
-              <TouchableOpacity
-                key={summary.id}
-                style={styles.summaryItem}
-                onPress={() => handleEntryPress(summary.id)}
-              >
-                <DetailsModal
-                  isModalVisible={isDetailsModalVisible[summary.id] || false}
-                  setModalVisible={(visible) =>
-                    setDetailsModalVisible((prevVisibility) => ({
-                      ...prevVisibility,
-                      [summary.id]: visible,
-                    }))
-                  }
-                  onDeletePress={() => handleDeletePress(summary.id)}
-                  onEditPress={() => handleEditPress(summary.id)}
-                  expanded={expandedEntryId === summary.id}
-                  onPress={() => setExpandedEntryId(summary.id)}
+            {summaries.length > 0 && typeof summaries[0] === "object" ? (
+              summaries.map((summary) => (
+                <TouchableOpacity
+                  key={summary.id}
+                  style={styles.summaryItem}
+                  onPress={() => handleEntryPress(summary.id)}
                 >
-                  <View style={styles.topEntryContainer}>
-                    <Text style={styles.timestamp}>
-                      {summary.created && summary.created.toDate
-                        ? summary.created.toDate().toLocaleString("en-US", {
-                            weekday: "long",
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                            second: "numeric",
-                            hour12: true,
-                          })
-                        : "Timestamp not available"}
-                    </Text>
-                  </View>
-                  <View style={styles.bodyEntryContainer}>
-                    <Text style={styles.entryText}>{summary.text}</Text>
-                  </View>
-                </DetailsModal>
-              </TouchableOpacity>
-            )) : (
+                  <DetailsModal
+                    isModalVisible={isDetailsModalVisible[summary.id] || false}
+                    setModalVisible={(visible) =>
+                      setDetailsModalVisible((prevVisibility) => ({
+                        ...prevVisibility,
+                        [summary.id]: visible,
+                      }))
+                    }
+                    onDeletePress={() => handleDeletePress(summary.id)}
+                    onEditPress={() => handleEditPress(summary.id)}
+                    expanded={expandedEntryId === summary.id}
+                    onPress={() => setExpandedEntryId(summary.id)}
+                  >
+                    <View style={styles.topEntryContainer}>
+                      <Text style={styles.timestamp}>
+                        {summary.created && summary.created.toDate
+                          ? summary.created.toDate().toLocaleString("en-US", {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                              second: "numeric",
+                              hour12: true,
+                            })
+                          : "Timestamp not available"}
+                      </Text>
+                    </View>
+                    <View style={styles.bodyEntryContainer}>
+                      <Text style={styles.entryText}>{summary.text}</Text>
+                    </View>
+                  </DetailsModal>
+                </TouchableOpacity>
+              ))
+            ) : (
               <Text style={styles.noSummariesText}>{summaries[0]}</Text>
             )}
           </View>
@@ -234,7 +263,7 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 150,
     justifyContent: "center",
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
   gradient: {
     position: "absolute",
@@ -251,33 +280,33 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontWeight: 'normal',
+    fontWeight: "normal",
     marginBottom: 20,
-    marginTop: 30, 
+    marginTop: 30,
     fontSize: 28,
     color: "#ffd7",
-    textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textAlign: "center",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
     textShadowOffset: { width: -0.5, height: 1 },
     textShadowRadius: 10,
   },
   summaryItem: {
     marginBottom: 10,
     padding: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)', 
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
     borderRadius: 10,
   },
   summaryDate: {
-    fontWeight: 'bold',
-    color: '#fff', 
+    fontWeight: "bold",
+    color: "#fff",
     marginBottom: 5,
   },
   summaryText: {
-    color: '#fff', 
+    color: "#fff",
   },
   noSummariesText: {
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
     marginTop: 20,
   },
   topEntryContainer: {

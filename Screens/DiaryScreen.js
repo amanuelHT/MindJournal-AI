@@ -42,7 +42,7 @@ const Diary = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchInputFocused, setSearchInputFocused] = useState(false);
   const user = auth.currentUser;
-  const backgroundImage = require("../images/backlogin.jpg"); // Replace with the path to your background image
+  const backgroundImage = require("../images/backlogin.jpg");
 
   useEffect(() => {
     const updateCurrentDate = () => {

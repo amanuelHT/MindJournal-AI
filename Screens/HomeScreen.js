@@ -38,7 +38,7 @@ const HomeScreen = () => {
       }
     });
 
-    setCurrentDate(new Date().toLocaleDateString()); // Set the current date
+    setCurrentDate(new Date().toLocaleDateString());
     fadeIn();
 
     return unsubscribe;

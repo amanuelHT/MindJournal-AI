@@ -9,14 +9,13 @@ import {
   ScrollView,
   Image,
   Platform,
-} 
-from "react-native";
+} from "react-native";
 import { sharedStyles, addModalStyles as styles } from "./ModalStyles";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Picker } from "@react-native-picker/picker";
 
 const emotions = ["😊", "😢", "😃", "😠", "😲", "😌"];
-// At the top of your file, add the writeLocations array
+
 const writeLocations = [
   "Quiet Café",
   "Library",
@@ -30,8 +29,7 @@ const writeLocations = [
   "BathRoom",
 ];
 
-const AddModalComponent = 
-({
+const AddModalComponent = ({
   isModalVisible,
   setModalVisible,
   newEntry,
@@ -39,7 +37,7 @@ const AddModalComponent =
   onCancelPress,
   onDonePress,
   onPhotoPress,
-  onTeaPress, // Pass onTeaPress as a prop
+  onTeaPress,
   onLocationPress,
   imageUri,
   isEditing,
@@ -107,15 +105,12 @@ const AddModalComponent =
               <AntDesign name="picture" size={24} color="white" />
             </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={handleTeaPress} // Use handleTeaPress for "rest" button
-              style={styles.ATeaIcon}
-            >
+            <TouchableOpacity onPress={handleTeaPress} style={styles.ATeaIcon}>
               <AntDesign name="rest" size={24} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={handleLocationPress} // Corrected function name
+              onPress={handleLocationPress}
               style={styles.ALocationIcon}
             >
               <AntDesign name="enviromento" size={24} color="white" />
@@ -139,7 +134,6 @@ const AddModalComponent =
                 {imageUri && (
                   <Image
                     source={{ uri: imageUri }}
-
                     style={styles.uploadedImage}
                     resizeMode="cover"
                   />
@@ -162,14 +156,14 @@ const AddModalComponent =
 
               {showTeaPicker ? (
                 <View style={styles.locationPickerContainer}>
-                  {/* Tea Picker */}
+                  {/* Emoji */}
                   <Picker
                     onValueChange={(itemValue) =>
                       handleEmotionSelect(itemValue)
                     }
                     itemStyle={styles.locationPickerItem}
                   >
-                    {/* Tea Picker items */}
+                    {/* Emoji */}
                     {emotions.map((emotion) => (
                       <Picker.Item
                         key={emotion}
