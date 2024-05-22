@@ -6,15 +6,14 @@ import {
   StyleSheet,
   Image,
   Alert,
-} 
-from "react-native";
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { auth, db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { deleteUser } from "firebase/auth";
 
-const ProfileScreen = ({ navigation }) => 
-{
+const ProfileScreen = ({ navigation }) => {
   const [user, setUser] = useState(null);
   const [name, setName] = useState("");
   const [profilePic, setProfilePic] = useState("");
@@ -24,7 +23,6 @@ const ProfileScreen = ({ navigation }) =>
       setUser(user);
 
       if (!user) {
-        // If the user is not signed in, navigate to the Login screen
         navigation.navigate("Login");
       } else {
         try {
@@ -48,11 +46,11 @@ const ProfileScreen = ({ navigation }) =>
 
     return () => unsubscribe();
   }, [navigation]);
-  const handleSignOut = async () =>
-   {
+
+  const handleSignOut = async () => {
     try {
       await auth.signOut();
-      setUser("");
+      setUser(null);
       setName("");
       setProfilePic("");
       navigation.navigate("Login");
@@ -66,12 +64,12 @@ const ProfileScreen = ({ navigation }) =>
       try {
         Alert.alert(
           "Choose Profile Picture",
-          "Select a source for your profile picture:",
+          "",
           [
             {
-              text: "Choose from Library",
+              text: "Take a Photo",
               onPress: async () => {
-                const result = await ImagePicker.launchImageLibraryAsync({
+                const result = await ImagePicker.launchCameraAsync({
                   mediaTypes: ImagePicker.MediaTypeOptions.Images,
                   allowsEditing: true,
                   aspect: [4, 3],
@@ -85,9 +83,9 @@ const ProfileScreen = ({ navigation }) =>
               },
             },
             {
-              text: "Take a Photo",
+              text: "Choose from Library",
               onPress: async () => {
-                const result = await ImagePicker.launchCameraAsync({
+                const result = await ImagePicker.launchImageLibraryAsync({
                   mediaTypes: ImagePicker.MediaTypeOptions.Images,
                   allowsEditing: true,
                   aspect: [4, 3],
@@ -139,6 +137,37 @@ const ProfileScreen = ({ navigation }) =>
     }
   };
 
+  const handleDeleteAccount = async () => {
+    if (user) {
+      Alert.alert(
+        "Delete Account",
+        "Are you sure you want to delete your account? This action cannot be undone.",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Delete",
+            style: "destructive",
+            onPress: async () => {
+              try {
+                await deleteUser(user);
+                setUser(null);
+                setName("");
+                setProfilePic("");
+                navigation.navigate("Login");
+              } catch (error) {
+                console.error("Error deleting account:", error);
+                Alert.alert("Error", "Unable to delete account.");
+              }
+            },
+          },
+        ]
+      );
+    }
+  };
+
   return (
     <LinearGradient
       colors={["#3498db", "#3498db", "#2980b9"]}
@@ -165,15 +194,17 @@ const ProfileScreen = ({ navigation }) =>
         {user ? (
           <View style={styles.userInfo}>
             <Text style={styles.userInfoText}>Email: {user.email}</Text>
-            <TouchableOpacity
-              style={styles.actionButton} // Updated style name
-              onPress={handleSignOut}
-            >
+            <TouchableOpacity style={styles.actionButton} onPress={handleSignOut}>
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
           </View>
         ) : (
           <Text>User not signed in</Text>
+        )}
+        {user && (
+          <TouchableOpacity onPress={handleDeleteAccount}>
+            <Text style={styles.deleteAccountText}>Delete Account</Text>
+          </TouchableOpacity>
         )}
       </View>
     </LinearGradient>
@@ -182,6 +213,7 @@ const ProfileScreen = ({ navigation }) =>
 
 const styles = StyleSheet.create({
   gradient: {
+    height: "130%",
     flex: 1,
   },
   backgroundImage: {
@@ -228,8 +260,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: "#fff",
   },
-  signOutButton: {
-    backgroundColor: "#e74c3c",
+  actionButton: {
+    backgroundColor: "#3498db",
     borderRadius: 8,
     padding: 15,
     alignItems: "center",
@@ -240,12 +272,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
   },
-  actionButton: {
-    backgroundColor: "#3498db", // Consistent color with other buttons
-    borderRadius: 8,
-    padding: 15,
-    alignItems: "center",
-    marginTop: 20,
+  deleteAccountText: {
+    color: "black",
+    fontSize: 15,
+    fontWeight: "bold",
+    textDecorationLine: "underline",
+    position: "absolute",
+    bottom: -80,
+    right: -55,
   },
 });
 

@@ -8,12 +8,11 @@ import {
   StyleSheet,
   ImageBackground,
 } from "react-native";
-
 import { LinearGradient } from "expo-linear-gradient";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-const backgroundImage = require("../images/backlogin.jpg"); // Change this to the actual path of your background image
+const backgroundImage = require("../images/backlogin.jpg");
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -28,7 +27,10 @@ const LoginScreen = ({ navigation }) => {
 
       await signInWithEmailAndPassword(auth, email, password);
 
-      navigation.navigate("Diary");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Tabs" }],
+      });
     } catch (error) {
       alert(error.message);
     }
@@ -117,7 +119,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "white",
     fontSize: 20,
-
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -141,7 +142,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-
   signUpButtonText: {
     color: "#fff",
     fontWeight: "bold",
@@ -153,12 +153,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textDecorationLine: "underline",
   },
-  animation: {
-    width: 200, // Adjust as needed
-    height: 200, // Adjust as needed
-    position: "absolute",
-    bottom: 20,
-  },
   gradient: {
     position: "absolute",
     left: 0,
@@ -166,7 +160,6 @@ const styles = StyleSheet.create({
     top: 0,
     height: "100%",
   },
-
   backToHomeButton: {
     marginTop: 20,
     backgroundColor: "#3498db",
@@ -182,7 +175,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-
   backToHomeButtonText: {
     color: "#fff",
     fontWeight: "bold",

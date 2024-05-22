@@ -9,7 +9,7 @@ import SummaryScreen from "../Screens/SummaryScreen"; // Import the SummaryScree
 const tabIcons = {
   Home: "home",
   Profile: "person",
-  Diary: "book",
+  Diary: "create",
   Summary: "book", // Icon for the SummaryScreen
 };
 
