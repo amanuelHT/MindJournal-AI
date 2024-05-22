@@ -371,6 +371,7 @@ const Diary = () => {
                         <Text style={styles.emotion}>{entry.emotion}</Text>
                         <Text style={styles.location}>{entry.location}</Text>
                       </View>
+
                       <View style={styles.bodyEntryContainer}>
                         <Text style={styles.entryText}>{entry.text}</Text>
                         {entry.imageUri && (
@@ -408,13 +409,11 @@ const Diary = () => {
                       <View style={styles.topEntryContainer}>
                         <Text style={styles.timestamp}>
                           {new Date(entry.timestamp).toLocaleString("en-US", {
-                            weekday: "long",
                             year: "numeric",
                             month: "long",
                             day: "numeric",
                             hour: "numeric",
-                            minute: "numeric",
-                            second: "numeric",
+
                             hour12: true,
                           })}
                         </Text>

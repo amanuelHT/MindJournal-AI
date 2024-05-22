@@ -11,9 +11,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import LottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { auth, db } from "../firebase"; // Import your Firebase auth and firestore instance
+import { auth, db } from "../firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 const HomeScreen = () => {
@@ -60,7 +59,7 @@ const HomeScreen = () => {
     setLoading(true);
     try {
       const diaryCollectionRef = collection(db, "diary");
-      const q = query(diaryCollectionRef, where("uid","==",uid));
+      const q = query(diaryCollectionRef, where("uid", "==", uid));
 
       const querySnapshot = await getDocs(q);
 
@@ -117,37 +116,27 @@ const HomeScreen = () => {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.container}>
-            <Animated.View style={[styles.overlay, { opacity: fadeAnim }]}>
-              <View style={styles.animationContainer}>
-                <LottieView
-                  source={require("../images/pen.json")}
-                  autoPlay
-                  loop
-                  style={styles.animation}
-                />
+            <Text style={styles.title}>{currentDate}</Text>
+            {loading ? (
+              <ActivityIndicator size="large" color="#ffffff" />
+            ) : diaryEntry ? (
+              <Text style={styles.quoteText}>{diaryEntry.text}</Text>
+            ) : (
+              <Text style={styles.quoteText}></Text>
+            )}
+            {!isLoggedIn && (
+              <View style={styles.buttonContainer}>
+                <TouchableHighlight
+                  underlayColor="#3498db"
+                  onPress={goToSignIn}
+                  style={styles.linkButton}
+                >
+                  <Text style={styles.linkText}>
+                    Log in. Write. Reflect. Your digital diary, your story.
+                  </Text>
+                </TouchableHighlight>
               </View>
-              <Text style={styles.title}>{currentDate}</Text>
-              {loading ? (
-                <ActivityIndicator size="large" color="#ffffff" />
-              ) : diaryEntry ? (
-                <Text style={styles.quoteText}>{diaryEntry.text}</Text>
-              ) : (
-                <Text style={styles.quoteText}></Text>
-              )}
-              {!isLoggedIn && (
-                <View style={styles.buttonContainer}>
-                  <TouchableHighlight
-                    underlayColor="#3498db"
-                    onPress={goToSignIn}
-                    style={styles.linkButton}
-                  >
-                    <Text style={styles.linkText}>
-                      Log in. Write. Reflect. Your digital diary, your story.
-                    </Text>
-                  </TouchableHighlight>
-                </View>
-              )}
-            </Animated.View>
+            )}
           </View>
         </ScrollView>
       </LinearGradient>

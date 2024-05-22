@@ -63,9 +63,8 @@ const DetailsModal = ({
         {
           text: "Delete",
           onPress: () => {
-            // Invoke the onDeletePress callback to handle the deletion
             onDeletePress();
-            // Optionally, you can close the modal after deletion
+
             setModalVisible(false);
           },
         },
@@ -115,12 +114,12 @@ const DetailsModal = ({
     </View>
   );
 };
-//  style the creating
+
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20,
-    padding: 20,
-    borderRadius: 20,
+    marginBottom: 10,
+    padding: 10,
+    borderRadius: 0,
     backgroundColor: "transparent",
     borderColor: "white",
     shadowColor: "#dcdcdc",

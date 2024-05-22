@@ -62,48 +62,44 @@ const ProfileScreen = ({ navigation }) => {
   const handleProfilePicPress = async () => {
     if (user) {
       try {
-        Alert.alert(
-          "Choose Profile Picture",
-          "",
-          [
-            {
-              text: "Take a Photo",
-              onPress: async () => {
-                const result = await ImagePicker.launchCameraAsync({
-                  mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                  allowsEditing: true,
-                  aspect: [4, 3],
-                  quality: 1,
-                });
+        Alert.alert("Choose Profile Picture", "", [
+          {
+            text: "Take a Photo",
+            onPress: async () => {
+              const result = await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+              });
 
-                if (!result.canceled) {
-                  setProfilePic(result.assets[0].uri);
-                  updateProfileData({ profilePic: result.assets[0].uri });
-                }
-              },
+              if (!result.canceled) {
+                setProfilePic(result.assets[0].uri);
+                updateProfileData({ profilePic: result.assets[0].uri });
+              }
             },
-            {
-              text: "Choose from Library",
-              onPress: async () => {
-                const result = await ImagePicker.launchImageLibraryAsync({
-                  mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                  allowsEditing: true,
-                  aspect: [4, 3],
-                  quality: 1,
-                });
+          },
+          {
+            text: "Choose from Library",
+            onPress: async () => {
+              const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+              });
 
-                if (!result.canceled) {
-                  setProfilePic(result.assets[0].uri);
-                  updateProfileData({ profilePic: result.assets[0].uri });
-                }
-              },
+              if (!result.canceled) {
+                setProfilePic(result.assets[0].uri);
+                updateProfileData({ profilePic: result.assets[0].uri });
+              }
             },
-            {
-              text: "Cancel",
-              style: "cancel",
-            },
-          ]
-        );
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+        ]);
       } catch (error) {
         console.error("Error handling profile picture press:", error);
       }
@@ -194,7 +190,10 @@ const ProfileScreen = ({ navigation }) => {
         {user ? (
           <View style={styles.userInfo}>
             <Text style={styles.userInfoText}>Email: {user.email}</Text>
-            <TouchableOpacity style={styles.actionButton} onPress={handleSignOut}>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={handleSignOut}
+            >
               <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
           </View>
@@ -250,7 +249,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     marginVertical: 15,
-    color: "#fff",
+    color: "black",
   },
   userInfo: {
     alignItems: "center",
@@ -258,7 +257,7 @@ const styles = StyleSheet.create({
   userInfoText: {
     fontSize: 18,
     marginBottom: 15,
-    color: "#fff",
+    color: "black",
   },
   actionButton: {
     backgroundColor: "#3498db",
