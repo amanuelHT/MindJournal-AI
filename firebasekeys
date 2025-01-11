@@ -4,6 +4,6 @@ const firebaseConfig = {
   projectId: "diary-app-65249",
   storageBucket: "diary-app-65249.appspot.com",
   messagingSenderId: "888072701695",
-  appId: "1:888072701695:web:bfcddf939d8aa413ce6eca",
-  measurementId: "G-QWX5QE6PH5",
+  appId: "1:888072701695:web:bfcddf93546546hfg9d8aa413ce6eca",
+  measurementId: "G-QW564645Xhgf5QE6PH5",
 };
