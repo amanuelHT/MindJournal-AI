@@ -1,9 +1,9 @@
 const firebaseConfig = {
-  apiKey: "AIzaSysvAQn9moJvsdg3IGbGIaI7Lvdsvs7gihxUlmnatlDcE",
+  apiKey: "",
   authDomain: "diary-app-65249.firebaseapp.com",
   projectId: "diary-app-65249",
   storageBucket: "diary-app-65249.appspot.com",
-  messagingSenderId: "888072701695",
-  appId: "1:888072701656395:web:bfcddf93546546hfg9ddds8aa413ce6eca",
-  measurementId: "G-QW564645Xhgf5QE6PH5",
+  messagingSenderId: "",
+  appId: "1:",
+  measurementId: "G-",
 };
