@@ -1,9 +1,0 @@
-const firebaseConfig = {
-  apiKey: "",
-  authDomain: "diary-app-65249.firebaseapp.com",
-  projectId: "diary-app-65249",
-  storageBucket: "diary-app-65249.appspot.com",
-  messagingSenderId: "",
-  appId: "1:",
-  measurementId: "G-",
-};
